@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Creator - Finals Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles/main.css" rel="stylesheet">
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                }
+            },
+            svg: {
+                fontCache: 'global',
+                internalSpeechTitles: false
+            },
+            chtml: {
+                displayAlign: 'left'
+            }
+        };
+    </script>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-modern sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-graduation-cap me-2 text-primary"></i>
+                Finals Simulator
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-home me-1"></i>Home
+                </a>
+                <a class="nav-link" href="test.html">
+                    <i class="fas fa-clipboard-list me-1"></i>Test Interface
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Question Set Configuration -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card card-modern">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-cog me-2"></i>Question Set Configuration
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="questionSetName" class="form-label fw-bold">Question Set Name</label>
+                                <input type="text" class="form-control" id="questionSetName" placeholder="e.g., Calculus Final Exam">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="subject" class="form-label fw-bold">Subject</label>
+                                <input type="text" class="form-control" id="subject" placeholder="e.g., Mathematics">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="timeLimit" class="form-label fw-bold">Time Limit (minutes)</label>
+                                <input type="number" class="form-control" id="timeLimit" placeholder="60" min="1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="allowAnswerChange" class="form-label fw-bold">Allow Answer Changes</label>
+                                <select class="form-select" id="allowAnswerChange">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="loadQuestionFile" class="form-label fw-bold">Load Existing Set</label>
+                                <div class="drag-drop-area" id="dragDropArea">
+                                    <input type="file" class="form-control form-control-sm" id="loadQuestionFile" accept=".json" style="display: none;">
+                                    <div class="drag-drop-content">
+                                        <i class="fas fa-cloud-upload-alt drag-drop-icon"></i>
+                                        <div class="drag-drop-text">
+                                            <div class="drag-drop-primary">Drop JSON file here</div>
+                                            <div class="drag-drop-secondary">or <span class="drag-drop-link" id="loadQuestionsBtn">click to browse</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="loadStatus" class="mt-2" style="display: none;">
+                            <div class="alert alert-success alert-sm mb-0 py-2" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <span id="loadStatusText">Question set loaded successfully!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Creator -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card card-modern">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Add Questions
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="questionForm">
+                            <div class="mb-3">
+                                <label for="questionText" class="form-label fw-bold">Question Text (LaTeX Supported)</label>
+                                <textarea class="form-control" id="questionText" rows="4" 
+                                    placeholder="Enter your question here. Use LaTeX for equations: $x^2 + y^2 = z^2$"></textarea>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Wrap your LaTeX string in <code>&dollar;</code> for inline math and <code>&dollar;&dollar;</code> for display math.
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Question Preview</label>
+                                <div class="latex-preview p-3" id="latexPreview">
+                                    <em class="text-muted">Type in the question field to see preview</em>
+                                </div>
+                            </div>
+
+                            <h6 class="fw-bold mt-4 mb-3">Answer Options</h6>
+                            
+                            <!-- Option A -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="optionA" class="form-label fw-bold">Option A</label>
+                                    <input type="text" class="form-control option-input" id="optionA" 
+                                           placeholder="First option (LaTeX supported)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Preview A</label>
+                                    <div class="latex-preview p-2 small" id="previewA">
+                                        <em class="text-muted">Option A preview</em>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Option B -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="optionB" class="form-label fw-bold">Option B</label>
+                                    <input type="text" class="form-control option-input" id="optionB" 
+                                           placeholder="Second option (LaTeX supported)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Preview B</label>
+                                    <div class="latex-preview p-2 small" id="previewB">
+                                        <em class="text-muted">Option B preview</em>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Option C -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="optionC" class="form-label fw-bold">Option C</label>
+                                    <input type="text" class="form-control option-input" id="optionC" 
+                                           placeholder="Third option (LaTeX supported)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Preview C</label>
+                                    <div class="latex-preview p-2 small" id="previewC">
+                                        <em class="text-muted">Option C preview</em>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Option D -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="optionD" class="form-label fw-bold">Option D</label>
+                                    <input type="text" class="form-control option-input" id="optionD" 
+                                           placeholder="Fourth option (LaTeX supported)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Preview D</label>
+                                    <div class="latex-preview p-2 small" id="previewD">
+                                        <em class="text-muted">Option D preview</em>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Option E -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="optionE" class="form-label fw-bold">Option E (Optional)</label>
+                                    <input type="text" class="form-control option-input" id="optionE" 
+                                           placeholder="Fifth option (optional, LaTeX supported)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Preview E</label>
+                                    <div class="latex-preview p-2 small" id="previewE">
+                                        <em class="text-muted">Option E preview</em>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="correctAnswer" class="form-label fw-bold">Correct Answer</label>
+                                    <select class="form-select" id="correctAnswer">
+                                        <option value="">Select correct answer</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                        <option value="E">E</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-gradient-success">
+                                    <i class="fas fa-plus me-2"></i>Add Question
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                                    <i class="fas fa-eraser me-2"></i>Clear Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questions List -->
+            <div class="col-lg-4">
+                <div class="card card-modern">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>Questions (<span id="questionCount">0</span>)
+                        </h5>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-light" onclick="exportQuestionSet()">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-light" onclick="clearAllQuestions()" title="Clear All">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="questionsList" class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;">
+                            <div class="list-group-item text-center text-muted py-4">
+                                <i class="fas fa-clipboard-list fa-2x mb-2"></i>
+                                <p class="mb-0">No questions added yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-download me-2"></i>Export Question Set
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exportFilename" class="form-label fw-bold">Filename</label>
+                        <input type="text" class="form-control" id="exportFilename" placeholder="question-set">
+                        <small class="form-text text-muted">.json extension will be added automatically</small>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This will download a JSON file containing all questions and settings.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadQuestionSet()">
+                        <i class="fas fa-download me-2"></i>Download
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/creator.js"></script>
+</body>
+</html>

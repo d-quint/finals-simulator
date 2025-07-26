@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "name": "Sample Calculus Final Exam",
+    "subject": "Mathematics - Calculus I",
+    "timeLimit": 90,
+    "allowAnswerChange": true,
+    "totalQuestions": 10,
+    "createdAt": "2025-01-27T12:00:00.000Z",
+    "version": "1.0"
+  },
+  "questions": [
+    {
+      "id": 1704038400000,
+      "question": "What is the derivative of $f(x) = x^3 + 2x^2 - 5x + 3$?",
+      "options": {
+        "A": "$3x^2 + 4x - 5$",
+        "B": "$3x^2 + 2x - 5$",
+        "C": "$x^2 + 4x - 5$",
+        "D": "$3x^3 + 4x^2 - 5x$"
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-01-27T12:00:00.000Z"
+    },
+    {
+      "id": 1704038401000,
+      "question": "Evaluate the integral: $$\\int_0^2 (3x^2 + 2x) dx$$",
+      "options": {
+        "A": "$12$",
+        "B": "$16$",
+        "C": "$18$",
+        "D": "$20$"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:01.000Z"
+    },
+    {
+      "id": 1704038402000,
+      "question": "Find $\\lim_{x \\to 0} \\frac{\\sin x}{x}$",
+      "options": {
+        "A": "$0$",
+        "B": "$1$",
+        "C": "$\\infty$",
+        "D": "Does not exist"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:02.000Z"
+    },
+    {
+      "id": 1704038403000,
+      "question": "What is the equation of the tangent line to $y = x^2$ at the point $(2, 4)$?",
+      "options": {
+        "A": "$y = 4x - 4$",
+        "B": "$y = 2x$",
+        "C": "$y = 4x + 4$",
+        "D": "$y = 2x - 4$"
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-01-27T12:00:03.000Z"
+    },
+    {
+      "id": 1704038404000,
+      "question": "Which of the following functions is continuous at $x = 0$?",
+      "options": {
+        "A": "$f(x) = \\frac{1}{x}$",
+        "B": "$f(x) = |x|$",
+        "C": "$f(x) = \\frac{\\sin x}{x}$ for $x \\neq 0$, $f(0) = 1$",
+        "D": "Both B and C"
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-01-27T12:00:04.000Z"
+    },
+    {
+      "id": 1704038405000,
+      "question": "Find the critical points of $f(x) = x^3 - 3x^2 - 9x + 5$",
+      "options": {
+        "A": "$x = -1, x = 3$",
+        "B": "$x = 1, x = -3$",
+        "C": "$x = 0, x = 2$",
+        "D": "$x = -2, x = 1$"
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-01-27T12:00:05.000Z"
+    },
+    {
+      "id": 1704038406000,
+      "question": "What is $\\frac{d}{dx}[\\ln(x^2 + 1)]$?",
+      "options": {
+        "A": "$\\frac{1}{x^2 + 1}$",
+        "B": "$\\frac{2x}{x^2 + 1}$",
+        "C": "$\\frac{2x}{x^2}$",
+        "D": "$2x \\ln(x^2 + 1)$"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:06.000Z"
+    },
+    {
+      "id": 1704038407000,
+      "question": "Using the chain rule, find the derivative of $y = (2x + 3)^5$",
+      "options": {
+        "A": "$5(2x + 3)^4$",
+        "B": "$10(2x + 3)^4$",
+        "C": "$2(2x + 3)^5$",
+        "D": "$5(2x + 3)^4 \\cdot 2$"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:07.000Z"
+    },
+    {
+      "id": 1704038408000,
+      "question": "What is the area under the curve $y = x^2$ from $x = 0$ to $x = 3$?",
+      "options": {
+        "A": "$6$",
+        "B": "$9$",
+        "C": "$\\frac{27}{3}$",
+        "D": "$9$"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:08.000Z"
+    },
+    {
+      "id": 1704038409000,
+      "question": "If $f(x) = e^{2x}$, what is $f'(x)$?",
+      "options": {
+        "A": "$e^{2x}$",
+        "B": "$2e^{2x}$",
+        "C": "$2xe^{2x-1}$",
+        "D": "$2e^x$"
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-01-27T12:00:09.000Z"
+    }
+  ]
+}
