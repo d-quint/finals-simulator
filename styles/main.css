@@ -989,7 +989,6 @@ div mjx-container {
     }
     
     .card-header {
-        padding: 0.75rem 1rem;
         font-size: 0.9rem;
     }
     
@@ -1898,4 +1897,86 @@ h6 { font-size: 0.85rem; font-weight: 600; }
 
 .drag-drop-area.error .drag-drop-text {
     color: var(--danger);
+}
+
+/* Question List Drag and Drop Styles */
+.draggable-item {
+    cursor: move;
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 0.75rem 1rem;
+}
+
+.draggable-item:hover {
+    background-color: var(--accent-subtle);
+    border-color: var(--accent-light);
+}
+
+.draggable-item.drag-over-top::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+    z-index: 1000;
+}
+
+.draggable-item.drag-over-bottom::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-primary);
+    border-radius: 2px;
+    z-index: 1000;
+}
+
+.drag-handle {
+    cursor: grab;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    padding: 0.25rem 0.25rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.drag-handle:hover {
+    opacity: 1;
+    background-color: var(--pale-gray);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.draggable-item[draggable="true"]:hover .drag-handle {
+    opacity: 1;
+}
+
+/* Question item button adjustments */
+.question-item .btn-group-vertical {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+}
+
+.question-item .btn-group-vertical .btn {
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+}
+
+.question-item .btn-group-vertical .btn:not(:last-child) {
+    margin-bottom: 3px;
 }

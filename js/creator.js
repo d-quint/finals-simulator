@@ -205,25 +205,33 @@ function updateQuestionsList() {
             : question.question;
         
         const isBeingEdited = editingQuestionIndex === index;
-        const itemClass = isBeingEdited ? 'list-group-item question-item border-warning bg-warning-light bg-opacity-10' : 'list-group-item question-item';
+        const itemClass = isBeingEdited ? 'list-group-item question-item border-warning bg-warning-light bg-opacity-10 draggable-item' : 'list-group-item question-item draggable-item';
         
         return `
-            <div class="${itemClass}">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1 fw-bold">
-                            Question ${index + 1}
-                            ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing</span>' : ''}
-                        </h6>
-                        <p class="mb-1 small">${escapeHtml(shortQuestion)}</p>
-                        <small class="text-muted">
-                            <i class="fas fa-check-circle text-success me-1"></i>
-                            Answer: ${question.correctAnswer}
-                        </small>
+            <div class="${itemClass}" draggable="true" data-index="${index}">
+                <div class="d-flex align-items-center">
+                    <div class="drag-handle me-3" title="Drag to reorder">
+                        <i class="fas fa-grip-vertical text-muted"></i>
                     </div>
-                    <div class="btn-group-vertical btn-group-sm ms-2">
+                    <div class="flex-grow-1 py-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 fw-bold">
+                                Question ${index + 1}
+                                ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing</span>' : ''}
+                            </h6>
+                            <small class="text-muted">
+                                <i class="fas fa-check-circle text-success me-1"></i>
+                                Answer: ${question.correctAnswer}
+                            </small>
+                        </div>
+                        <p class="mb-0 small text-break">${escapeHtml(shortQuestion)}</p>
+                    </div>
+                    <div class="btn-group-vertical btn-group-sm ms-3">
                         <button class="btn btn-outline-primary btn-sm" onclick="editQuestion(${index})" title="Edit" ${isBeingEdited ? 'disabled' : ''}>
                             <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="duplicateQuestion(${index})" title="Duplicate">
+                            <i class="fas fa-copy"></i>
                         </button>
                         <button class="btn btn-outline-danger btn-sm" onclick="deleteQuestion(${index})" title="Delete">
                             <i class="fas fa-trash"></i>
@@ -233,6 +241,9 @@ function updateQuestionsList() {
             </div>
         `;
     }).join('');
+    
+    // Set up drag and drop functionality for reordering
+    setupQuestionDragAndDrop();
 }
 
 function updateQuestionCount() {
@@ -298,6 +309,37 @@ function deleteQuestion(index) {
         updateQuestionCount();
         showSuccessMessage('Question deleted successfully.');
     }
+}
+
+function duplicateQuestion(index) {
+    const originalQuestion = questions[index];
+    
+    // Create a deep copy of the question
+    const duplicatedQuestion = {
+        id: Date.now(), // New unique ID
+        question: originalQuestion.question,
+        options: {
+            A: originalQuestion.options.A,
+            B: originalQuestion.options.B,
+            C: originalQuestion.options.C,
+            D: originalQuestion.options.D,
+            E: originalQuestion.options.E || ''
+        },
+        correctAnswer: originalQuestion.correctAnswer,
+        createdAt: new Date().toISOString()
+    };
+    
+    // Insert the duplicated question right after the original
+    questions.splice(index + 1, 0, duplicatedQuestion);
+    
+    // Update the display
+    updateQuestionsList();
+    updateQuestionCount();
+    
+    // Automatically edit the duplicated question
+    editQuestion(index + 1);
+    
+    showSuccessMessage('Question duplicated successfully! Edit the copy as needed.');
 }
 
 function clearForm() {
@@ -756,4 +798,120 @@ function resetDragDropState() {
     const text = dragDropArea.querySelector('.drag-drop-primary');
     if (icon) icon.className = 'fas fa-cloud-upload-alt drag-drop-icon';
     if (text) text.textContent = 'Drop JSON file here';
+}
+
+// Set up drag and drop functionality for question reordering
+function setupQuestionDragAndDrop() {
+    const questionsList = document.getElementById('questionsList');
+    if (!questionsList) return;
+    
+    const draggableItems = questionsList.querySelectorAll('.draggable-item');
+    let draggedElement = null;
+    let draggedIndex = null;
+    
+    draggableItems.forEach((item, index) => {
+        // Drag start
+        item.addEventListener('dragstart', function(e) {
+            draggedElement = this;
+            draggedIndex = parseInt(this.dataset.index);
+            this.style.opacity = '0.5';
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+        });
+        
+        // Drag end
+        item.addEventListener('dragend', function(e) {
+            this.style.opacity = '';
+            draggedElement = null;
+            draggedIndex = null;
+            
+            // Remove all drag indicators
+            const allItems = questionsList.querySelectorAll('.draggable-item');
+            allItems.forEach(item => {
+                item.classList.remove('drag-over-top', 'drag-over-bottom');
+            });
+        });
+        
+        // Drag over
+        item.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            if (draggedElement !== this) {
+                const rect = this.getBoundingClientRect();
+                const midpoint = rect.top + rect.height / 2;
+                
+                // Remove previous indicators
+                this.classList.remove('drag-over-top', 'drag-over-bottom');
+                
+                // Add appropriate indicator
+                if (e.clientY < midpoint) {
+                    this.classList.add('drag-over-top');
+                } else {
+                    this.classList.add('drag-over-bottom');
+                }
+            }
+        });
+        
+        // Drag leave
+        item.addEventListener('dragleave', function(e) {
+            // Only remove if we're actually leaving this element
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('drag-over-top', 'drag-over-bottom');
+            }
+        });
+        
+        // Drop
+        item.addEventListener('drop', function(e) {
+            e.preventDefault();
+            
+            if (draggedElement !== this && draggedIndex !== null) {
+                const targetIndex = parseInt(this.dataset.index);
+                const rect = this.getBoundingClientRect();
+                const midpoint = rect.top + rect.height / 2;
+                
+                let newIndex;
+                if (e.clientY < midpoint) {
+                    // Drop above
+                    newIndex = targetIndex;
+                } else {
+                    // Drop below
+                    newIndex = targetIndex + 1;
+                }
+                
+                // Adjust for the item being removed
+                if (draggedIndex < newIndex) {
+                    newIndex--;
+                }
+                
+                // Perform the reorder
+                reorderQuestion(draggedIndex, newIndex);
+            }
+            
+            this.classList.remove('drag-over-top', 'drag-over-bottom');
+        });
+    });
+}
+
+// Function to reorder questions
+function reorderQuestion(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+    
+    // Adjust editing index if necessary
+    if (editingQuestionIndex === fromIndex) {
+        editingQuestionIndex = toIndex;
+    } else if (editingQuestionIndex > fromIndex && editingQuestionIndex <= toIndex) {
+        editingQuestionIndex--;
+    } else if (editingQuestionIndex < fromIndex && editingQuestionIndex >= toIndex) {
+        editingQuestionIndex++;
+    }
+    
+    // Move the question
+    const movedQuestion = questions.splice(fromIndex, 1)[0];
+    questions.splice(toIndex, 0, movedQuestion);
+    
+    // Update the display
+    updateQuestionsList();
+    
+    showSuccessMessage(`Question moved from position ${fromIndex + 1} to position ${toIndex + 1}.`);
 }
