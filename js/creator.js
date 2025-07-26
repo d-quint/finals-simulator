@@ -147,8 +147,10 @@ function validateQuestionData(data) {
         return false;
     }
     
-    if (!data.options.A || !data.options.B || !data.options.C || !data.options.D) {
-        showErrorMessage('Please fill in at least options A, B, C, and D.');
+    // Check if at least one option is filled
+    const hasAtLeastOneOption = data.options.A || data.options.B || data.options.C || data.options.D || data.options.E;
+    if (!hasAtLeastOneOption) {
+        showErrorMessage('Please fill in at least one answer option.');
         return false;
     }
     
