@@ -497,7 +497,7 @@ div mjx-container {
 /* Floating Scantron Button */
 .floating-scantron {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     z-index: 1050;
     width: 60px;
@@ -888,10 +888,43 @@ div mjx-container {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
+    /* Navigation improvements */
+    .navbar {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 0.9rem;
+    }
+    
+    /* Make navbar items horizontal on mobile */
+    .navbar-nav {
+        flex-direction: row !important;
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Hide text labels on small screens, keep icons */
+    .nav-link .fas {
+        margin-right: 0 !important;
+    }
+    
+    .nav-link:not(.navbar-brand) {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    
+    /* Test interface mobile optimizations */
     .floating-scantron {
         width: 50px;
         height: 50px;
         font-size: 0.9rem;
+        bottom: 15px;
+        right: 15px;
     }
     
     .scantron-bubble {
@@ -924,14 +957,97 @@ div mjx-container {
     .timer-display {
         font-size: 0.9rem;
         padding: 10px 16px;
+        margin-bottom: 0.5rem;
     }
     
+    /* Test header mobile compact */
+    .test-header {
+        padding: 0.75rem;
+        text-align: center;
+    }
+    
+    .test-header h4 {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Submit button area */
+    .test-controls {
+        padding: 0.75rem;
+        text-align: center;
+    }
+    
+    /* Card and content optimizations */
     .card-modern {
         margin-bottom: 15px;
+        border-radius: 6px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
     }
     
     .question-navigation {
         padding: 15px;
+    }
+    
+    /* Form and input optimizations */
+    .form-control {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .form-label {
+        font-size: 0.8rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Button optimizations */
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Question display optimizations */
+    .exam-question {
+        margin-bottom: 1rem;
+    }
+    
+    .exam-question-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .question-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+        line-height: 30px;
+        flex-shrink: 0;
+    }
+    
+    .question-text {
+        font-size: 0.85rem;
+        flex: 1;
+        line-height: 1.4;
     }
     
     /* Answer choices responsive */
@@ -942,6 +1058,66 @@ div mjx-container {
     
     .answer-choice {
         padding: 4px 6px;
+        font-size: 0.8rem;
+    }
+    
+    .choice-indicator {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+        line-height: 20px;
+    }
+    
+    /* Test instructions compact */
+    .alert {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Progress and status indicators */
+    .progress {
+        height: 0.5rem;
+    }
+    
+    /* Table responsive improvements */
+    .table {
+        font-size: 0.75rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem;
+    }
+    
+    /* Modal optimizations */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-header {
+        padding: 0.75rem;
+    }
+    
+    .modal-body {
+        padding: 0.75rem;
+    }
+    
+    .modal-footer {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    /* Drag and drop area mobile */
+    .drag-drop-area {
+        min-height: 60px;
+        padding: 0.5rem;
+    }
+    
+    .drag-drop-icon {
+        font-size: 1.2rem;
+    }
+    
+    .drag-drop-text {
+        font-size: 0.75rem;
     }
     
     /* Mobile Typography */
@@ -952,68 +1128,382 @@ div mjx-container {
     h5 { font-size: 0.9rem; }
     h6 { font-size: 0.8rem; }
     
-    .navbar-brand {
-        font-size: 0.9rem;
+    .lead {
+        font-size: 1rem;
     }
     
-    .nav-link {
-        font-size: 0.8rem;
+    /* Spacing adjustments */
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
     
-    .card-body {
-        font-size: 0.8rem;
+    .py-4 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
     }
     
-    .card-body p,
-    .card-body .small,
-    .card-body small {
+    .py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    /* Hide labels but keep icons for navigation */
+    .nav-link .nav-text {
+        display: none;
+    }
+    
+    .nav-link .fas {
+        margin-right: 0 !important;
+    }
+    
+    /* Compact file info display */
+    #fileInfo {
+        padding: 0.5rem;
         font-size: 0.75rem;
+    }
+    
+    /* Results screen optimizations */
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-icon {
+        font-size: 3rem;
+    }
+    
+    .feature-card {
+        padding: 2rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+    }
+    
+    /* Score boxes with horizontal gaps */
+    .row > [class*="col-"] {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Results score containers */
+    .bg-light-gray {
+        background-color: var(--pale-gray) !important;
+        margin: 0.25rem;
+        padding: 1rem !important;
     }
 }
 
 @media (max-width: 576px) {
+    /* Ultra-compact mobile layout */
     .container {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     
+    /* Navigation ultra-compact */
+    .navbar {
+        padding: 0.25rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 0.8rem;
+    }
+    
+    /* Keep navbar items horizontal and ultra-compact */
+    .navbar-nav {
+        flex-direction: row !important;
+        gap: 0.25rem;
+    }
+    
+    /* Hide all nav link text, show only icons */
+    .nav-link {
+        padding: 0.2rem 0.4rem;
+        font-size: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-link .fas {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+    
+    /* Ultra-compact scantron */
     .scantron-grid {
-        padding: 10px;
-        gap: 4px;
-        max-height: 75vh;
+        padding: 8px;
+        gap: 3px;
+        max-height: 80vh;
     }
     
     .scantron-bubble {
-        width: 22px;
-        height: 22px;
-        font-size: 0.7rem;
+        width: 20px;
+        height: 20px;
+        font-size: 0.65rem;
     }
     
     .scantron-question-number {
-        font-size: 0.75rem;
-        min-width: 20px;
+        font-size: 0.7rem;
+        min-width: 18px;
     }
     
     .floating-scantron {
-        width: 45px;
-        height: 45px;
-        font-size: 0.85rem;
+        width: 42px;
+        height: 42px;
+        font-size: 0.8rem;
+        bottom: 10px;
+        right: 10px;
     }
     
-    /* Small screen typography */
-    h1 { font-size: 1.2rem; }
-    h2 { font-size: 1rem; }
-    h3 { font-size: 0.95rem; }
-    h4, h5, h6 { font-size: 0.85rem; }
-    
+    /* Compact cards */
     .card-body {
+        padding: 0.75rem;
         font-size: 0.75rem;
     }
     
-    .card-body p,
-    .card-body .small,
-    .card-body small {
+    .card-header {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Ultra-compact forms */
+    .form-control {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .form-label {
+        font-size: 0.75rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    /* Compact buttons */
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .btn-lg {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
         font-size: 0.7rem;
+    }
+    
+    /* Compact question display */
+    .question-number {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
+        line-height: 26px;
+    }
+    
+    .question-text {
+        font-size: 0.8rem;
+        padding-left: 0.4rem;
+    }
+    
+    .answer-choice {
+        padding: 3px 5px;
+        font-size: 0.75rem;
+    }
+    
+    .choice-indicator {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+        line-height: 18px;
+    }
+    
+    /* Compact timer */
+    .timer-display {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+    
+    /* Compact alerts */
+    .alert {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Compact modals */
+    .modal-dialog {
+        margin: 0.2rem;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 0.5rem;
+    }
+    
+    /* Ultra-compact typography */
+    h1 { font-size: 1.1rem; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: 0.9rem; }
+    h4 { font-size: 0.85rem; }
+    h5 { font-size: 0.8rem; }
+    h6 { font-size: 0.75rem; }
+    
+    .lead {
+        font-size: 0.9rem;
+    }
+    
+    /* Compact drag drop */
+    .drag-drop-area {
+        min-height: 50px;
+        padding: 0.4rem;
+    }
+    
+    .drag-drop-icon {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .drag-drop-text {
+        font-size: 0.7rem;
+    }
+    
+    /* Table ultra-compact */
+    .table {
+        font-size: 0.7rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.3rem;
+    }
+    
+    /* Question list compact */
+    .question-item {
+        padding: 0.5rem;
+    }
+    
+    .question-item h6 {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .question-item p {
+        font-size: 0.7rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .question-item small {
+        font-size: 0.65rem;
+    }
+    
+    /* Compact button groups */
+    .btn-group-vertical .btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+    }
+    
+    /* Progress bars */
+    .progress {
+        height: 0.4rem;
+    }
+    
+    /* Compact spacing */
+    .py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    .py-5 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    
+    .mb-3 {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* File info ultra-compact */
+    #fileInfo {
+        padding: 0.4rem;
+        font-size: 0.7rem;
+    }
+    
+    /* Results screen compact */
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-icon {
+        font-size: 2.5rem;
+    }
+    
+    .feature-card {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-icon {
+        font-size: 2rem;
+    }
+    
+    /* Score boxes ultra-compact with gaps */
+    .row > [class*="col-"] {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .bg-light-gray {
+        margin: 0.125rem;
+        padding: 0.75rem !important;
+    }
+    
+    .bg-light-gray h2 {
+        font-size: 1.5rem;
+    }
+    
+    .bg-light-gray small {
+        font-size: 0.7rem;
+    }
+    
+    /* LaTeX preview compact */
+    .latex-preview {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Creator specific */
+    .option-input {
+        font-size: 0.75rem;
+    }
+    
+    /* Toast compact */
+    .toast {
+        font-size: 0.75rem;
+    }
+    
+    .toast-body {
+        padding: 0.5rem;
     }
 }
 
