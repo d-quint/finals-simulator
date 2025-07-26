@@ -9,7 +9,7 @@ let isShading = false;
 let shadingTimeout = null;
 
 // Shading simulation configuration
-const SHADING_DURATION_SECONDS = 2.5;
+const SHADING_DURATION_SECONDS = 1.75;
 
 // Helper function to preserve spaces around LaTeX expressions
 function preserveSpacesAroundLatex(text) {
