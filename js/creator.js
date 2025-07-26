@@ -160,7 +160,8 @@ function validateQuestionData(data) {
     }
     
     // Check if the selected correct answer has a corresponding option
-    if (!data.options[data.correctAnswer]) {
+    // Allow E to be empty (for "None of the above" type questions)
+    if (!data.options[data.correctAnswer] && data.correctAnswer !== 'E') {
         showErrorMessage('The selected correct answer option is empty.');
         return false;
     }
