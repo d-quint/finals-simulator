@@ -15,6 +15,10 @@ const SHADING_DURATION_SECONDS = 1.75;
 function preserveSpacesAroundLatex(text) {
     if (!text) return text;
     
+    // First, convert line breaks to HTML line breaks
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n'); // Normalize line endings
+    text = text.replace(/\n/g, '<br>'); // Convert to HTML line breaks
+    
     // Replace spaces before and after inline math with non-breaking spaces
     text = text.replace(/(\s+)\$([^$]+)\$(\s+)/g, '&nbsp;$$$2$$&nbsp;');
     text = text.replace(/^(\s*)\$([^$]+)\$/gm, '&nbsp;$$$2$$');

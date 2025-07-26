@@ -56,7 +56,7 @@ function updateLatexPreview() {
         return;
     }
     
-    // Preserve spacing around LaTeX expressions
+    // Preserve spacing around LaTeX expressions and line breaks
     const processedText = preserveSpacesAroundLatex(questionText);
     
     // Set the content and trigger MathJax rendering
@@ -85,7 +85,7 @@ function updateOptionPreview(inputId, previewId) {
         return;
     }
     
-    // Preserve spacing around LaTeX expressions
+    // Preserve spacing around LaTeX expressions and line breaks
     const processedText = preserveSpacesAroundLatex(inputText);
     
     // Set the content and trigger MathJax rendering
@@ -614,6 +614,10 @@ function setDragDropError() {
 
 // Helper function to preserve spaces around LaTeX expressions
 function preserveSpacesAroundLatex(text) {
+    // First, convert line breaks to HTML line breaks
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n'); // Normalize line endings
+    text = text.replace(/\n/g, '<br>'); // Convert to HTML line breaks
+    
     // Replace spaces before and after inline math with non-breaking spaces
     text = text.replace(/(\s+)\$([^$]+)\$(\s+)/g, '&nbsp;$$$2$$&nbsp;');
     text = text.replace(/^(\s*)\$([^$]+)\$/gm, '&nbsp;$$$2$$');
