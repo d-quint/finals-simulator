@@ -11,7 +11,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
     <!-- MathJax for LaTeX rendering -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script>
         window.MathJax = {
@@ -115,12 +115,12 @@
         </div>
 
         <!-- Question Creator -->
-        <div class="row">
+        <div class="row" id="questionCreatorRow">
             <div class="col-lg-8">
-                <div class="card card-modern">
+                <div class="card card-modern" id="questionCard">
                     <div class="card-header bg-success text-white">
                         <h4 class="mb-0">
-                            <i class="fas fa-plus-circle me-2"></i>Add Questions
+                            <i class="fas fa-plus-circle me-2"></i>Add Question
                         </h4>
                     </div>
                     <div class="card-body">
@@ -254,6 +254,9 @@
                             <i class="fas fa-list me-2"></i>Questions (<span id="questionCount">0</span>)
                         </h5>
                         <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-light" onclick="addQuestionBank()" title="Add Question Bank">
+                                <i class="fas fa-database"></i>
+                            </button>
                             <button type="button" class="btn btn-sm btn-outline-light" onclick="exportQuestionSet()">
                                 <i class="fas fa-download"></i>
                             </button>

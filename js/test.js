@@ -1,5 +1,6 @@
 // Test Interface JavaScript
 let questionSet = null;
+let originalQuestionSet = null; // Store the original unprocessed question set
 let currentQuestionIndex = 0;
 let userAnswers = {};
 let startTime = null;
@@ -87,9 +88,19 @@ function showFileInfo(data) {
     const fileInfo = document.getElementById('fileInfo');
     const fileDetails = document.getElementById('fileDetails');
     
+    // Calculate total questions including question banks
+    let totalQuestions = 0;
+    data.questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            totalQuestions += item.questionsToSelect;
+        } else {
+            totalQuestions += 1;
+        }
+    });
+    
     fileDetails.innerHTML = `
         <strong>${data.metadata.name}</strong> - ${data.metadata.subject}<br>
-        ${data.questions.length} questions • ${data.metadata.timeLimit} minutes
+        ${totalQuestions} questions • ${data.metadata.timeLimit} minutes
         ${data.metadata.allowAnswerChange ? '• Answer changes allowed' : '• No answer changes'}
     `;
     
@@ -116,6 +127,7 @@ function processQuestionSetFile(file, onComplete) {
         try {
             const data = JSON.parse(e.target.result);
             if (validateQuestionSet(data)) {
+                originalQuestionSet = JSON.parse(JSON.stringify(data)); // Deep copy of original
                 questionSet = data;
                 showFileInfo(data);
                 document.getElementById('startTestBtn').disabled = false;
@@ -198,8 +210,44 @@ function setupDragAndDrop() {
     }
 }
 
+// Function to process question banks and generate the final question array
+function processQuestionBanks(items) {
+    const processedQuestions = [];
+    
+    items.forEach(item => {
+        if (item.type === 'questionBank') {
+            // This is a question bank - randomly select questions from it
+            const bank = item;
+            const availableQuestions = [...bank.questions]; // Create a copy
+            const selectedQuestions = [];
+            
+            // Randomly select the specified number of questions
+            for (let i = 0; i < Math.min(bank.questionsToSelect, availableQuestions.length); i++) {
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                const selectedQuestion = availableQuestions.splice(randomIndex, 1)[0];
+                selectedQuestions.push(selectedQuestion);
+            }
+            
+            // Add selected questions to the processed array
+            processedQuestions.push(...selectedQuestions);
+        } else {
+            // This is a regular question - add it directly
+            processedQuestions.push(item);
+        }
+    });
+    
+    return processedQuestions;
+}
+
 function startTest() {
-    if (!questionSet) return;
+    if (!originalQuestionSet) return;
+    
+    // Always process from the original question set to ensure fresh randomization
+    const processedQuestions = processQuestionBanks(originalQuestionSet.questions);
+    
+    // Create a fresh copy of the question set with processed questions
+    questionSet = JSON.parse(JSON.stringify(originalQuestionSet));
+    questionSet.questions = processedQuestions;
     
     // Initialize test data
     currentQuestionIndex = 0;
@@ -910,6 +958,7 @@ function retakeTest() {
 
 function loadNewTest() {
     questionSet = null;
+    originalQuestionSet = null;
     showScreen('loadScreen');
     document.getElementById('questionSetFile').value = '';
     hideFileInfo();

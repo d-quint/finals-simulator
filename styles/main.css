@@ -1980,3 +1980,150 @@ h6 { font-size: 0.85rem; font-weight: 600; }
 .question-item .btn-group-vertical .btn:not(:last-child) {
     margin-bottom: 3px;
 }
+
+/* Question Bank Styles */
+.question-bank-item {
+    background: var(--accent-subtle);
+    border-left: 4px solid var(--accent-primary);
+}
+
+.question-bank-item .bank-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.question-bank-item .bank-info {
+    flex-grow: 1;
+}
+
+.question-bank-item .bank-name {
+    font-weight: 600;
+    color: var(--accent-dark);
+}
+
+.question-bank-item .bank-stats {
+    font-size: 0.85em;
+    color: var(--medium-gray);
+}
+
+.question-bank-item .bank-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.question-bank-item .bank-controls .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+/* Minimize/Expand button styling */
+.question-bank-item .bank-controls .btn-outline-info {
+    border-color: var(--accent-primary);
+    color: var(--accent-dark);
+}
+
+.question-bank-item .bank-controls .btn-outline-info:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+/* Bank questions container - simple show/hide */
+.bank-questions-container {
+    display: block;
+}
+
+.bank-questions-container.minimized {
+    display: none;
+}
+
+/* Bank question items (nested under bank) */
+.bank-question-item {
+    margin-left: 35px; /* Increased indentation so drag icon isn't too close to edge */
+    margin-right: 0;
+    background: #f8f9fa; /* Slightly less white than normal questions */
+    position: relative;
+    padding: 0.5rem !important; /* Add proper padding within the container */
+    border-left: none;
+    border-right: none;
+}
+
+/* Remove the dash indicator */
+.bank-question-item::before {
+    display: none;
+}
+
+.bank-question-item .question-text {
+    padding-left: 0;
+}
+
+/* Apply the same button styles as regular question items */
+.bank-question-item .btn-group-vertical {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+}
+
+.bank-question-item .btn-group-vertical .btn {
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+}
+
+.bank-question-item .btn-group-vertical .btn:not(:last-child) {
+    margin-bottom: 3px;
+}
+
+/* Drag and drop for bank items */
+.question-bank-item.drop-zone-active {
+    background: var(--accent-light);
+    border-left-color: var(--accent-dark);
+    box-shadow: 0 0 0 2px var(--accent-primary);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
+.question-bank-item.drop-zone-active::after {
+    content: 'Drop question here to add to bank';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--accent-primary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Drop zone for entire questions list */
+#questionsList.drop-zone-active {
+    background: rgba(var(--accent-primary-rgb, 13, 110, 253), 0.1);
+    border: 2px dashed var(--accent-primary);
+    border-radius: 8px;
+}
+
+#questionsList.drop-zone-active::after {
+    content: 'Drop here to move question to main list';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--accent-primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.bank-question-item.dragging {
+    opacity: 0.5;
+}
