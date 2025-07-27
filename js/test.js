@@ -1,5 +1,6 @@
 // Test Interface JavaScript
 let questionSet = null;
+let originalQuestionSet = null; // Store the original unprocessed question set
 let currentQuestionIndex = 0;
 let userAnswers = {};
 let startTime = null;
@@ -86,18 +87,31 @@ function validateQuestionSet(data) {
 function showFileInfo(data) {
     const fileInfo = document.getElementById('fileInfo');
     const fileDetails = document.getElementById('fileDetails');
+    const testOptions = document.getElementById('testOptions');
+    
+    // Calculate total questions including question banks
+    let totalQuestions = 0;
+    data.questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            totalQuestions += item.questionsToSelect;
+        } else {
+            totalQuestions += 1;
+        }
+    });
     
     fileDetails.innerHTML = `
         <strong>${data.metadata.name}</strong> - ${data.metadata.subject}<br>
-        ${data.questions.length} questions • ${data.metadata.timeLimit} minutes
+        ${totalQuestions} questions • ${data.metadata.timeLimit} minutes
         ${data.metadata.allowAnswerChange ? '• Answer changes allowed' : '• No answer changes'}
     `;
     
     fileInfo.classList.remove('d-none');
+    testOptions.classList.remove('d-none');
 }
 
 function hideFileInfo() {
     document.getElementById('fileInfo').classList.add('d-none');
+    document.getElementById('testOptions').classList.add('d-none');
     document.getElementById('startTestBtn').disabled = true;
 }
 
@@ -116,6 +130,7 @@ function processQuestionSetFile(file, onComplete) {
         try {
             const data = JSON.parse(e.target.result);
             if (validateQuestionSet(data)) {
+                originalQuestionSet = JSON.parse(JSON.stringify(data)); // Deep copy of original
                 questionSet = data;
                 showFileInfo(data);
                 document.getElementById('startTestBtn').disabled = false;
@@ -198,8 +213,96 @@ function setupDragAndDrop() {
     }
 }
 
+// Function to process question banks and generate the final question array
+function processQuestionBanks(items) {
+    const processedQuestions = [];
+    
+    items.forEach(item => {
+        if (item.type === 'questionBank') {
+            // This is a question bank - randomly select questions from it
+            const bank = item;
+            const availableQuestions = [...bank.questions]; // Create a copy
+            const selectedQuestions = [];
+            
+            // Randomly select the specified number of questions
+            for (let i = 0; i < Math.min(bank.questionsToSelect, availableQuestions.length); i++) {
+                const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                const selectedQuestion = availableQuestions.splice(randomIndex, 1)[0];
+                selectedQuestions.push(selectedQuestion);
+            }
+            
+            // Add selected questions to the processed array
+            processedQuestions.push(...selectedQuestions);
+        } else {
+            // This is a regular question - add it directly
+            processedQuestions.push(item);
+        }
+    });
+    
+    return processedQuestions;
+}
+
+// Function to shuffle answer choices while preserving questions with correct answer E
+function shuffleAnswerChoices(questions) {
+    return questions.map(question => {
+        // Skip shuffling if the correct answer is E (these are intentionally structured)
+        if (question.correctAnswer === 'E') {
+            return question;
+        }
+        
+        // Get only the choices that actually have content
+        const availableChoices = ['A', 'B', 'C', 'D'].filter(choice => 
+            question.options[choice] && question.options[choice].trim() !== ''
+        );
+        
+        // If there are fewer than 2 choices, no need to shuffle
+        if (availableChoices.length < 2) {
+            return question;
+        }
+        
+        // Create array of choice content in original order
+        const choiceContents = availableChoices.map(choice => question.options[choice]);
+        
+        // Shuffle the content array
+        const shuffledContents = [...choiceContents].sort(() => Math.random() - 0.5);
+        
+        // Create new options object
+        const newOptions = { ...question.options };
+        
+        // Map shuffled content back to the available choices
+        availableChoices.forEach((choice, index) => {
+            newOptions[choice] = shuffledContents[index];
+        });
+        
+        // Find the new correct answer by finding where the original correct content ended up
+        const originalCorrectContent = question.options[question.correctAnswer];
+        const newCorrectChoice = availableChoices.find(choice => 
+            newOptions[choice] === originalCorrectContent
+        );
+        
+        return {
+            ...question,
+            options: newOptions,
+            correctAnswer: newCorrectChoice || question.correctAnswer
+        };
+    });
+}
+
 function startTest() {
-    if (!questionSet) return;
+    if (!originalQuestionSet) return;
+    
+    // Always process from the original question set to ensure fresh randomization
+    const processedQuestions = processQuestionBanks(originalQuestionSet.questions);
+    
+    // Create a fresh copy of the question set with processed questions
+    questionSet = JSON.parse(JSON.stringify(originalQuestionSet));
+    questionSet.questions = processedQuestions;
+    
+    // Apply choice shuffling if enabled
+    const shuffleChoices = document.getElementById('shuffleChoices').checked;
+    if (shuffleChoices) {
+        questionSet.questions = shuffleAnswerChoices(questionSet.questions);
+    }
     
     // Initialize test data
     currentQuestionIndex = 0;
@@ -910,6 +1013,7 @@ function retakeTest() {
 
 function loadNewTest() {
     questionSet = null;
+    originalQuestionSet = null;
     showScreen('loadScreen');
     document.getElementById('questionSetFile').value = '';
     hideFileInfo();

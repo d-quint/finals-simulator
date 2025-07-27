@@ -2,6 +2,8 @@
 let questions = [];
 let currentQuestionIndex = 0;
 let editingQuestionIndex = -1; // Track which question is being edited
+let currentBankIndex = -1; // Track which question bank is being edited
+let editingBankQuestionIndex = -1; // Track which question within a bank is being edited
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -111,16 +113,26 @@ function handleQuestionSubmit(event) {
     
     if (validateQuestionData(questionData)) {
         if (editingQuestionIndex >= 0) {
-            // Update existing question
+            // Update existing regular question
             updateQuestionInList(editingQuestionIndex, questionData);
             showSuccessMessage('Question updated successfully!');
+        } else if (currentBankIndex >= 0 && editingBankQuestionIndex >= 0) {
+            // Update existing bank question
+            const bank = questions[currentBankIndex];
+            bank.questions[editingBankQuestionIndex] = questionData;
+            showSuccessMessage('Bank question updated successfully!');
+        } else if (currentBankIndex >= 0) {
+            // Add new question to bank
+            const bank = questions[currentBankIndex];
+            bank.questions.push(questionData);
+            showSuccessMessage('Question added to bank successfully!');
         } else {
-            // Add new question
+            // Add new regular question
             addQuestionToList(questionData);
             showSuccessMessage('Question added successfully!');
         }
         clearForm();
-        // Update the questions list again to remove any editing indicators
+        resetEditingMode();
         updateQuestionsList();
     }
 }
@@ -196,62 +208,188 @@ function updateQuestionsList() {
                 <p class="mb-0">No questions added yet</p>
             </div>
         `;
+        updateQuestionCount();
         return;
     }
     
-    questionsList.innerHTML = questions.map((question, index) => {
-        const shortQuestion = question.question.length > 50 
-            ? question.question.substring(0, 50) + '...' 
-            : question.question;
-        
-        const isBeingEdited = editingQuestionIndex === index;
-        const itemClass = isBeingEdited ? 'list-group-item question-item border-warning bg-warning-light bg-opacity-10 draggable-item' : 'list-group-item question-item draggable-item';
-        
-        return `
-            <div class="${itemClass}" draggable="true" data-index="${index}">
-                <div class="d-flex align-items-center">
-                    <div class="drag-handle me-3" title="Drag to reorder">
-                        <i class="fas fa-grip-vertical text-muted"></i>
-                    </div>
-                    <div class="flex-grow-1 py-2">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 fw-bold">
-                                Question ${index + 1}
-                                ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing</span>' : ''}
-                            </h6>
-                            <small class="text-muted">
-                                <i class="fas fa-check-circle text-success me-1"></i>
-                                Answer: ${question.correctAnswer}
-                            </small>
+    let html = '';
+    let questionNumber = 1;
+    
+    questions.forEach((item, index) => {
+        if (item.type === 'questionBank') {
+            // Render question bank
+            const bank = item;
+            const currentQuestionNumber = questionNumber;
+            questionNumber += bank.questionsToSelect;
+            
+            const isBeingEdited = currentBankIndex === index && editingBankQuestionIndex === -1;
+            const itemClass = isBeingEdited ? 'list-group-item question-bank-item border-warning bg-warning-light bg-opacity-10 draggable-item' : 'list-group-item question-bank-item draggable-item';
+            
+            html += `
+                <div class="${itemClass}" draggable="true" data-index="${index}" data-type="bank">
+                    <div class="bank-header">
+                        <div class="drag-handle" title="Drag to reorder">
+                            <i class="fas fa-grip-vertical text-muted"></i>
                         </div>
-                        <p class="mb-0 small text-break">${escapeHtml(shortQuestion)}</p>
-                    </div>
-                    <div class="btn-group-vertical btn-group-sm ms-3">
-                        <button class="btn btn-outline-primary btn-sm" onclick="editQuestion(${index})" title="Edit" ${isBeingEdited ? 'disabled' : ''}>
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" onclick="duplicateQuestion(${index})" title="Duplicate">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="deleteQuestion(${index})" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <div class="bank-info">
+                            <div class="bank-name">
+                                <i class="fas fa-database me-1"></i>
+                                Q${currentQuestionNumber}-${currentQuestionNumber + bank.questionsToSelect - 1}: ${escapeHtml(bank.name)}
+                                ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing Bank</span>' : ''}
+                            </div>
+                            <div class="bank-stats">
+                                ${bank.questionsToSelect} random from ${bank.questions.length} questions
+                            </div>
+                        </div>
+                        <div class="bank-controls">
+                            <button class="btn btn-sm btn-outline-info" onclick="toggleBankMinimize(${index})" title="Minimize/Expand Bank">
+                                <i class="fas ${bank.minimized === true ? 'fa-chevron-down' : 'fa-chevron-up'}"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="editBankName(${index})" title="Edit Bank">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="duplicateQuestion(${index})" title="Duplicate Bank">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteQuestion(${index})" title="Delete Bank">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    }).join('');
+            `;
+            
+            // Always render the container for animation, but add minimized class if needed
+            // Handle backwards compatibility for banks without minimized property
+            const isMinimized = bank.minimized === true;
+            const containerClass = isMinimized ? 'bank-questions-container minimized' : 'bank-questions-container';
+            html += `<div class="${containerClass}">`;
+            
+            // Render bank questions
+            bank.questions.forEach((question, qIndex) => {
+                const shortQuestion = question.question.length > 50 
+                    ? question.question.substring(0, 50) + '...' 
+                    : question.question;
+                
+                const isBeingEdited = currentBankIndex === index && editingBankQuestionIndex === qIndex;
+                const itemClass = isBeingEdited ? 'list-group-item bank-question-item border-warning bg-warning-light bg-opacity-10 draggable-item' : 'list-group-item bank-question-item draggable-item';
+                
+                // Use simple 1-based numbering within the bank
+                const bankQuestionNumber = qIndex + 1;
+                
+                html += `
+                    <div class="${itemClass}" draggable="true" data-index="${index}" data-question-index="${qIndex}" data-type="bank-question">
+                        <div class="d-flex align-items-center">
+                            <div class="drag-handle me-3" title="Drag to reorder">
+                                <i class="fas fa-grip-vertical text-muted"></i>
+                            </div>
+                            <div class="flex-grow-1 py-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0 fw-bold">
+                                        Question ${bankQuestionNumber}
+                                        ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing</span>' : ''}
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-check-circle text-success me-1"></i>
+                                        Answer: ${question.correctAnswer}
+                                    </small>
+                                </div>
+                                <p class="mb-0 small text-break">${escapeHtml(shortQuestion)}</p>
+                            </div>
+                            <div class="btn-group-vertical btn-group-sm ms-3">
+                                <button class="btn btn-outline-primary btn-sm" onclick="editBankQuestion(${index}, ${qIndex})" title="Edit" ${isBeingEdited ? 'disabled' : ''}>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="duplicateBankQuestion(${index}, ${qIndex})" title="Duplicate">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="deleteBankQuestion(${index}, ${qIndex})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`; // Close bank-questions-container
+            
+        } else {
+            // Render regular question
+            const question = item;
+            const currentQuestionNumber = questionNumber++;
+            
+            const shortQuestion = question.question.length > 50 
+                ? question.question.substring(0, 50) + '...' 
+                : question.question;
+            
+            const isBeingEdited = editingQuestionIndex === index;
+            const itemClass = isBeingEdited ? 'list-group-item question-item border-warning bg-warning-light bg-opacity-10 draggable-item' : 'list-group-item question-item draggable-item';
+            
+            html += `
+                <div class="${itemClass}" draggable="true" data-index="${index}" data-type="question">
+                    <div class="d-flex align-items-center">
+                        <div class="drag-handle me-3" title="Drag to reorder">
+                            <i class="fas fa-grip-vertical text-muted"></i>
+                        </div>
+                        <div class="flex-grow-1 py-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0 fw-bold">
+                                    Question ${currentQuestionNumber}
+                                    ${isBeingEdited ? '<span class="badge bg-light text-dark ms-2">Editing</span>' : ''}
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-check-circle text-success me-1"></i>
+                                    Answer: ${question.correctAnswer}
+                                </small>
+                            </div>
+                            <p class="mb-0 small text-break">${escapeHtml(shortQuestion)}</p>
+                        </div>
+                        <div class="btn-group-vertical btn-group-sm ms-3">
+                            <button class="btn btn-outline-primary btn-sm" onclick="editQuestion(${index})" title="Edit" ${isBeingEdited ? 'disabled' : ''}>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="duplicateQuestion(${index})" title="Duplicate">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteQuestion(${index})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    questionsList.innerHTML = html;
+    updateQuestionCount();
     
     // Set up drag and drop functionality for reordering
     setupQuestionDragAndDrop();
 }
 
 function updateQuestionCount() {
-    document.getElementById('questionCount').textContent = questions.length;
+    let totalQuestions = 0;
+    questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            totalQuestions += item.questionsToSelect;
+        } else {
+            totalQuestions += 1;
+        }
+    });
+    document.getElementById('questionCount').textContent = totalQuestions;
 }
 
 function editQuestion(index) {
-    const question = questions[index];
+    const item = questions[index];
+    
+    // Only allow editing regular questions, not question banks
+    if (item.type === 'questionBank') {
+        showErrorMessage('Use the "Manage Bank" button to edit question banks.');
+        return;
+    }
+    
+    const question = item;
     
     // Set editing mode
     editingQuestionIndex = index;
@@ -295,6 +433,14 @@ function editQuestion(index) {
 }
 
 function deleteQuestion(index) {
+    const item = questions[index];
+    
+    // Handle question banks differently
+    if (item.type === 'questionBank') {
+        deleteQuestionBank(index);
+        return;
+    }
+    
     if (confirm('Are you sure you want to delete this question?')) {
         // If we're editing the question being deleted, reset editing state
         if (editingQuestionIndex === index) {
@@ -312,7 +458,15 @@ function deleteQuestion(index) {
 }
 
 function duplicateQuestion(index) {
-    const originalQuestion = questions[index];
+    const originalItem = questions[index];
+    
+    // Handle question banks differently
+    if (originalItem.type === 'questionBank') {
+        duplicateQuestionBank(index);
+        return;
+    }
+    
+    const originalQuestion = originalItem;
     
     // Create a deep copy of the question
     const duplicatedQuestion = {
@@ -376,6 +530,94 @@ function clearAllQuestions() {
         updateQuestionCount();
         showSuccessMessage('All questions cleared.');
     }
+}
+
+function shuffleAllChoices() {
+    if (questions.length === 0) {
+        showInfoMessage('No questions to shuffle. Please add some questions first.');
+        return;
+    }
+    
+    // Count how many questions will be affected
+    let affectedCount = 0;
+    questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            // Count questions in banks that don't have E as correct answer
+            affectedCount += item.questions.filter(q => q.correctAnswer !== 'E').length;
+        } else if (item.correctAnswer !== 'E') {
+            // Count regular questions that don't have E as correct answer
+            affectedCount++;
+        }
+    });
+    
+    if (affectedCount === 0) {
+        showInfoMessage('No questions need shuffling. All questions either have correct answer E or have insufficient choices.');
+        return;
+    }
+    
+    if (confirm(`This will shuffle the answer choices for ${affectedCount} questions. Questions with correct answer "E" will remain unchanged. Are you sure you want to continue?`)) {
+        shuffleQuestionsChoices();
+        updateQuestionsList();
+        showSuccessMessage(`Successfully shuffled answer choices for ${affectedCount} questions!`);
+    }
+}
+
+function shuffleQuestionsChoices() {
+    questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            // Shuffle questions within the bank
+            item.questions = shuffleQuestionChoicesArray(item.questions);
+        } else {
+            // Shuffle regular question
+            const shuffled = shuffleQuestionChoicesArray([item]);
+            Object.assign(item, shuffled[0]);
+        }
+    });
+}
+
+function shuffleQuestionChoicesArray(questionsArray) {
+    return questionsArray.map(question => {
+        // Skip shuffling if the correct answer is E (these are intentionally structured)
+        if (question.correctAnswer === 'E') {
+            return question;
+        }
+        
+        // Get only the choices that actually have content
+        const availableChoices = ['A', 'B', 'C', 'D'].filter(choice => 
+            question.options[choice] && question.options[choice].trim() !== ''
+        );
+        
+        // If there are fewer than 2 choices, no need to shuffle
+        if (availableChoices.length < 2) {
+            return question;
+        }
+        
+        // Create array of choice content in original order
+        const choiceContents = availableChoices.map(choice => question.options[choice]);
+        
+        // Shuffle the content array
+        const shuffledContents = [...choiceContents].sort(() => Math.random() - 0.5);
+        
+        // Create new options object
+        const newOptions = { ...question.options };
+        
+        // Map shuffled content back to the available choices
+        availableChoices.forEach((choice, index) => {
+            newOptions[choice] = shuffledContents[index];
+        });
+        
+        // Find the new correct answer by finding where the original correct content ended up
+        const originalCorrectContent = question.options[question.correctAnswer];
+        const newCorrectChoice = availableChoices.find(choice => 
+            newOptions[choice] === originalCorrectContent
+        );
+        
+        return {
+            ...question,
+            options: newOptions,
+            correctAnswer: newCorrectChoice || question.correctAnswer
+        };
+    });
 }
 
 function exportQuestionSet() {
@@ -812,12 +1054,45 @@ function setupQuestionDragAndDrop() {
     const draggableItems = questionsList.querySelectorAll('.draggable-item');
     let draggedElement = null;
     let draggedIndex = null;
+    let draggedType = null;
+    let draggedQuestionIndex = null;
+    
+    // Set up drop zone for the entire questions list area
+    questionsList.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        // If dragging over empty space or between items
+        if (!e.target.closest('.draggable-item') && draggedType === 'bank-question') {
+            this.classList.add('drop-zone-active');
+        }
+    });
+    
+    questionsList.addEventListener('dragleave', function(e) {
+        // Only remove if we're actually leaving the questions list
+        if (!this.contains(e.relatedTarget)) {
+            this.classList.remove('drop-zone-active');
+        }
+    });
+    
+    questionsList.addEventListener('drop', function(e) {
+        e.preventDefault();
+        
+        // Handle dropping bank question on empty space (move to end of main list)
+        if (!e.target.closest('.draggable-item') && draggedType === 'bank-question') {
+            moveBankQuestionToMainList(draggedIndex, draggedQuestionIndex, questions.length);
+        }
+        
+        this.classList.remove('drop-zone-active');
+    });
     
     draggableItems.forEach((item, index) => {
         // Drag start
         item.addEventListener('dragstart', function(e) {
             draggedElement = this;
             draggedIndex = parseInt(this.dataset.index);
+            draggedType = this.dataset.type;
+            draggedQuestionIndex = this.dataset.questionIndex ? parseInt(this.dataset.questionIndex) : null;
             this.style.opacity = '0.5';
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', this.outerHTML);
@@ -828,12 +1103,15 @@ function setupQuestionDragAndDrop() {
             this.style.opacity = '';
             draggedElement = null;
             draggedIndex = null;
+            draggedType = null;
+            draggedQuestionIndex = null;
             
             // Remove all drag indicators
             const allItems = questionsList.querySelectorAll('.draggable-item');
             allItems.forEach(item => {
-                item.classList.remove('drag-over-top', 'drag-over-bottom');
+                item.classList.remove('drag-over-top', 'drag-over-bottom', 'drop-zone-active');
             });
+            questionsList.classList.remove('drop-zone-active');
         });
         
         // Drag over
@@ -846,13 +1124,18 @@ function setupQuestionDragAndDrop() {
                 const midpoint = rect.top + rect.height / 2;
                 
                 // Remove previous indicators
-                this.classList.remove('drag-over-top', 'drag-over-bottom');
+                this.classList.remove('drag-over-top', 'drag-over-bottom', 'drop-zone-active');
                 
-                // Add appropriate indicator
-                if (e.clientY < midpoint) {
-                    this.classList.add('drag-over-top');
+                // Special handling for dropping onto question banks
+                if (this.dataset.type === 'bank' && draggedType === 'question') {
+                    this.classList.add('drop-zone-active');
                 } else {
-                    this.classList.add('drag-over-bottom');
+                    // Add appropriate indicator for reordering
+                    if (e.clientY < midpoint) {
+                        this.classList.add('drag-over-top');
+                    } else {
+                        this.classList.add('drag-over-bottom');
+                    }
                 }
             }
         });
@@ -861,7 +1144,7 @@ function setupQuestionDragAndDrop() {
         item.addEventListener('dragleave', function(e) {
             // Only remove if we're actually leaving this element
             if (!this.contains(e.relatedTarget)) {
-                this.classList.remove('drag-over-top', 'drag-over-bottom');
+                this.classList.remove('drag-over-top', 'drag-over-bottom', 'drop-zone-active');
             }
         });
         
@@ -871,28 +1154,89 @@ function setupQuestionDragAndDrop() {
             
             if (draggedElement !== this && draggedIndex !== null) {
                 const targetIndex = parseInt(this.dataset.index);
-                const rect = this.getBoundingClientRect();
-                const midpoint = rect.top + rect.height / 2;
                 
-                let newIndex;
-                if (e.clientY < midpoint) {
-                    // Drop above
-                    newIndex = targetIndex;
+                // Handle dropping a regular question onto a question bank
+                if (this.dataset.type === 'bank' && draggedType === 'question') {
+                    // Move question into the bank
+                    moveQuestionToBank(draggedIndex, targetIndex);
+                } else if (draggedType === 'bank-question' && this.dataset.type === 'bank-question') {
+                    // Handle reordering within the same bank or moving between banks
+                    const targetBankIndex = parseInt(this.dataset.index);
+                    const targetQuestionIndex = parseInt(this.dataset.questionIndex);
+                    
+                    if (draggedIndex === targetBankIndex) {
+                        // Reordering within the same bank
+                        const rect = this.getBoundingClientRect();
+                        const midpoint = rect.top + rect.height / 2;
+                        
+                        let newIndex;
+                        if (e.clientY < midpoint) {
+                            // Drop above
+                            newIndex = targetQuestionIndex;
+                        } else {
+                            // Drop below
+                            newIndex = targetQuestionIndex + 1;
+                        }
+                        
+                        // Adjust for the item being removed
+                        if (draggedQuestionIndex < newIndex) {
+                            newIndex--;
+                        }
+                        
+                        if (draggedQuestionIndex !== newIndex) {
+                            reorderWithinBank(draggedIndex, draggedQuestionIndex, newIndex);
+                        }
+                    } else {
+                        // Moving to a different bank
+                        moveBankQuestionToBank(draggedIndex, draggedQuestionIndex, targetBankIndex);
+                    }
+                } else if (draggedType === 'bank-question' && this.dataset.type === 'bank') {
+                    // Move bank question to different bank
+                    moveBankQuestionToBank(draggedIndex, draggedQuestionIndex, targetIndex);
+                } else if (draggedType === 'bank-question' && (this.dataset.type === 'question' || this.dataset.type === 'bank')) {
+                    // Move bank question out to main questions list
+                    const rect = this.getBoundingClientRect();
+                    const midpoint = rect.top + rect.height / 2;
+                    
+                    let newIndex;
+                    if (e.clientY < midpoint) {
+                        // Drop above
+                        newIndex = targetIndex;
+                    } else {
+                        // Drop below
+                        newIndex = targetIndex + 1;
+                    }
+                    
+                    moveBankQuestionToMainList(draggedIndex, draggedQuestionIndex, newIndex);
                 } else {
-                    // Drop below
-                    newIndex = targetIndex + 1;
+                    // Regular reordering
+                    const rect = this.getBoundingClientRect();
+                    const midpoint = rect.top + rect.height / 2;
+                    
+                    let newIndex;
+                    if (e.clientY < midpoint) {
+                        // Drop above
+                        newIndex = targetIndex;
+                    } else {
+                        // Drop below
+                        newIndex = targetIndex + 1;
+                    }
+                    
+                    // Adjust for the item being removed
+                    if (draggedIndex < newIndex) {
+                        newIndex--;
+                    }
+                    
+                    // Perform the reorder
+                    if (draggedType === 'question' || draggedType === 'bank') {
+                        reorderQuestion(draggedIndex, newIndex);
+                    } else if (draggedType === 'bank-question') {
+                        reorderBankQuestion(draggedIndex, draggedQuestionIndex, newIndex);
+                    }
                 }
-                
-                // Adjust for the item being removed
-                if (draggedIndex < newIndex) {
-                    newIndex--;
-                }
-                
-                // Perform the reorder
-                reorderQuestion(draggedIndex, newIndex);
             }
             
-            this.classList.remove('drag-over-top', 'drag-over-bottom');
+            this.classList.remove('drag-over-top', 'drag-over-bottom', 'drop-zone-active');
         });
     });
 }
@@ -916,6 +1260,321 @@ function reorderQuestion(fromIndex, toIndex) {
     
     // Update the display
     updateQuestionsList();
+}
+
+// Function to move a regular question into a question bank
+function moveQuestionToBank(questionIndex, bankIndex) {
+    const question = questions[questionIndex];
+    const bank = questions[bankIndex];
     
-    showSuccessMessage(`Question moved from position ${fromIndex + 1} to position ${toIndex + 1}.`);
+    // Only allow moving regular questions to banks
+    if (question.type === 'questionBank' || bank.type !== 'questionBank') return;
+    
+    // Remove question from main array
+    questions.splice(questionIndex, 1);
+    
+    // Add to bank
+    bank.questions.push(question);
+    
+    // Adjust editing index if necessary
+    if (editingQuestionIndex === questionIndex) {
+        resetEditingMode();
+    } else if (editingQuestionIndex > questionIndex) {
+        editingQuestionIndex--;
+    }
+    
+    updateQuestionsList();
+    showSuccessMessage(`Question moved to "${bank.name}" bank successfully!`);
+}
+
+// Function to move a bank question to a different bank
+function moveBankQuestionToBank(sourceBankIndex, questionIndex, targetBankIndex) {
+    const sourceBank = questions[sourceBankIndex];
+    const targetBank = questions[targetBankIndex];
+    
+    if (sourceBank.type !== 'questionBank' || targetBank.type !== 'questionBank') return;
+    if (sourceBankIndex === targetBankIndex) return;
+    
+    // Get the question
+    const question = sourceBank.questions[questionIndex];
+    
+    // Remove from source bank
+    sourceBank.questions.splice(questionIndex, 1);
+    
+    // Add to target bank
+    targetBank.questions.push(question);
+    
+    // Clear editing mode if we were editing this question
+    if (currentBankIndex === sourceBankIndex && editingBankQuestionIndex === questionIndex) {
+        resetEditingMode();
+    }
+    
+    updateQuestionsList();
+    showSuccessMessage(`Question moved to "${targetBank.name}" bank successfully!`);
+}
+
+// Function to move a bank question to the main questions list
+function moveBankQuestionToMainList(bankIndex, questionIndex, targetIndex) {
+    const bank = questions[bankIndex];
+    
+    if (bank.type !== 'questionBank') return;
+    
+    // Get the question
+    const question = bank.questions[questionIndex];
+    
+    // Remove from bank
+    bank.questions.splice(questionIndex, 1);
+    
+    // Insert into main questions list at target position
+    questions.splice(targetIndex, 0, question);
+    
+    // Clear editing mode if we were editing this question
+    if (currentBankIndex === bankIndex && editingBankQuestionIndex === questionIndex) {
+        resetEditingMode();
+    }
+    
+    updateQuestionsList();
+    showSuccessMessage('Question moved to main list successfully!');
+}
+
+// Function to reorder bank questions (within the same bank or between banks)
+function reorderBankQuestion(bankIndex, questionIndex, newPosition) {
+    // This function is deprecated - use reorderWithinBank instead
+    updateQuestionsList();
+}
+
+// Function to reorder questions within the same bank
+function reorderWithinBank(bankIndex, fromIndex, toIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    if (fromIndex === toIndex) return;
+    
+    // Adjust editing index if necessary
+    if (currentBankIndex === bankIndex && editingBankQuestionIndex === fromIndex) {
+        editingBankQuestionIndex = toIndex;
+    } else if (currentBankIndex === bankIndex && editingBankQuestionIndex > fromIndex && editingBankQuestionIndex <= toIndex) {
+        editingBankQuestionIndex--;
+    } else if (currentBankIndex === bankIndex && editingBankQuestionIndex < fromIndex && editingBankQuestionIndex >= toIndex) {
+        editingBankQuestionIndex++;
+    }
+    
+    // Move the question within the bank
+    const movedQuestion = bank.questions.splice(fromIndex, 1)[0];
+    bank.questions.splice(toIndex, 0, movedQuestion);
+    
+    // Update the display
+    updateQuestionsList();
+    showSuccessMessage('Question reordered within bank successfully!');
+}
+
+// Function to toggle bank minimize/expand state
+function toggleBankMinimize(bankIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    
+    // Initialize minimized property if it doesn't exist (backwards compatibility)
+    if (bank.minimized === undefined) {
+        bank.minimized = false;
+    }
+    
+    // Toggle the minimized state
+    bank.minimized = !bank.minimized;
+    
+    // Update the display
+    updateQuestionsList();
+}
+
+// Question Bank Management Functions
+
+function addQuestionBank() {
+    const name = prompt('Enter question bank name:', 'Question Bank');
+    if (!name || name.trim() === '') return;
+    
+    const questionsToSelectInput = prompt('How many questions should be selected from this bank?', '3');
+    if (!questionsToSelectInput) return;
+    
+    const questionsToSelect = parseInt(questionsToSelectInput);
+    if (isNaN(questionsToSelect) || questionsToSelect < 1) {
+        showErrorMessage('Please enter a valid number of questions to select (must be 1 or greater).');
+        return;
+    }
+    
+    const questionBank = {
+        id: Date.now(),
+        type: 'questionBank',
+        name: name.trim(),
+        questionsToSelect: questionsToSelect,
+        questions: [],
+        minimized: false,
+        createdAt: new Date().toISOString()
+    };
+    
+    questions.push(questionBank);
+    updateQuestionsList();
+    showSuccessMessage(`Question bank "${name}" created successfully! Add questions to the bank by dragging them onto it.`);
+}
+
+function editBankName(bankIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    
+    // Set editing mode for the bank and show indicator immediately
+    currentBankIndex = bankIndex;
+    editingBankQuestionIndex = -1; // Not editing a specific question, just the bank
+    updateQuestionsList(); // Show the editing indicator immediately
+    
+    const newName = prompt('Enter new bank name:', bank.name);
+    if (!newName) {
+        // Reset editing mode if cancelled
+        resetEditingMode();
+        updateQuestionsList();
+        return;
+    }
+    
+    const questionsToSelectInput = prompt(`How many questions should be selected from this bank? (max: ${bank.questions.length})`, bank.questionsToSelect.toString());
+    if (!questionsToSelectInput) {
+        // Reset editing mode if cancelled
+        resetEditingMode();
+        updateQuestionsList();
+        return;
+    }
+    
+    const questionsToSelect = parseInt(questionsToSelectInput);
+    if (isNaN(questionsToSelect) || questionsToSelect < 1 || questionsToSelect > bank.questions.length) {
+        alert(`Please enter a valid number between 1 and ${bank.questions.length}.`);
+        // Reset editing mode
+        resetEditingMode();
+        updateQuestionsList();
+        return;
+    }
+    
+    bank.name = newName;
+    bank.questionsToSelect = questionsToSelect;
+    
+    // Reset editing mode after successful edit
+    resetEditingMode();
+    
+    updateQuestionsList();
+    showSuccessMessage('Bank updated successfully!');
+}
+
+function editBankQuestion(bankIndex, questionIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    
+    const question = bank.questions[questionIndex];
+    
+    // Populate the main form with this question's data
+    document.getElementById('questionText').value = question.question;
+    document.getElementById('optionA').value = question.options.A || '';
+    document.getElementById('optionB').value = question.options.B || '';
+    document.getElementById('optionC').value = question.options.C || '';
+    document.getElementById('optionD').value = question.options.D || '';
+    document.getElementById('optionE').value = question.options.E || '';
+    document.getElementById('correctAnswer').value = question.correctAnswer;
+    
+    // Update previews
+    updateLatexPreview();
+    ['optionA', 'optionB', 'optionC', 'optionD', 'optionE'].forEach(optionId => {
+        const previewId = 'preview' + optionId.slice(-1);
+        updateOptionPreview(optionId, previewId);
+    });
+    
+    // Set editing mode for bank question
+    editingQuestionIndex = -1; // Not editing a main question
+    currentBankIndex = bankIndex;
+    editingBankQuestionIndex = questionIndex;
+    
+    // Show editing indicator immediately
+    updateQuestionsList();
+    
+    // Change button text
+    const submitBtn = document.querySelector('#questionForm button[type="submit"]');
+    submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Update Bank Question';
+    
+    showSuccessMessage('Question loaded for editing. Update and submit to save changes to the bank.');
+}
+
+function deleteBankQuestion(bankIndex, questionIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    
+    if (confirm('Are you sure you want to delete this question from the bank?')) {
+        bank.questions.splice(questionIndex, 1);
+        
+        // Clear editing mode if we were editing this question
+        if (currentBankIndex === bankIndex && editingBankQuestionIndex === questionIndex) {
+            clearForm();
+            resetEditingMode();
+        }
+        
+        updateQuestionsList();
+        showSuccessMessage('Question deleted from bank successfully!');
+    }
+}
+
+function duplicateBankQuestion(bankIndex, questionIndex) {
+    const bank = questions[bankIndex];
+    if (bank.type !== 'questionBank') return;
+    
+    const originalQuestion = bank.questions[questionIndex];
+    const duplicatedQuestion = {
+        id: Date.now() + Math.random(),
+        question: originalQuestion.question,
+        options: { ...originalQuestion.options },
+        correctAnswer: originalQuestion.correctAnswer
+    };
+    
+    // Insert the duplicated question right after the original
+    bank.questions.splice(questionIndex + 1, 0, duplicatedQuestion);
+    
+    updateQuestionsList();
+    showSuccessMessage('Question duplicated in bank successfully!');
+}
+
+function resetEditingMode() {
+    editingQuestionIndex = -1;
+    currentBankIndex = -1;
+    editingBankQuestionIndex = -1;
+    
+    const submitBtn = document.querySelector('#questionForm button[type="submit"]');
+    submitBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Add Question';
+}
+
+function duplicateQuestionBank(bankIndex) {
+    const originalBank = questions[bankIndex];
+    
+    if (originalBank.type !== 'questionBank') return;
+    
+    const duplicatedBank = {
+        id: Date.now(),
+        type: 'questionBank',
+        name: originalBank.name + ' (Copy)',
+        questionsToSelect: originalBank.questionsToSelect,
+        questions: originalBank.questions.map(question => ({
+            ...question,
+            id: Date.now() + Math.random() // Ensure unique IDs
+        })),
+        createdAt: new Date().toISOString()
+    };
+    
+    questions.splice(bankIndex + 1, 0, duplicatedBank);
+    updateQuestionsList();
+    updateQuestionCount();
+    
+    showSuccessMessage('Question bank duplicated successfully!');
+}
+
+function deleteQuestionBank(bankIndex) {
+    const bank = questions[bankIndex];
+    
+    if (bank.type !== 'questionBank') return;
+    
+    if (confirm(`Are you sure you want to delete the question bank "${bank.name}"? This will remove ${bank.questions.length} questions from the bank.`)) {
+        questions.splice(bankIndex, 1);
+        updateQuestionsList();
+        updateQuestionCount();
+        
+        showSuccessMessage('Question bank deleted successfully!');
+    }
 }
