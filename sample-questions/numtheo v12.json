@@ -1,0 +1,1222 @@
+{
+  "metadata": {
+    "name": "Final Exam",
+    "subject": "Number Theory",
+    "timeLimit": 120,
+    "allowAnswerChange": false,
+    "totalQuestions": 93,
+    "createdAt": "2025-07-27T06:30:27.657Z",
+    "version": "1.0"
+  },
+  "questions": [
+    {
+      "id": 1753559797998,
+      "question": "Number theory is the branch of mathematics concerned with the integers.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T19:56:37.998Z"
+    },
+    {
+      "id": 1753560092260,
+      "question": "In the early 1900s, number theory became extremely useful in cryptosystems.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T20:01:32.260Z"
+    },
+    {
+      "id": 1753560121420,
+      "question": "This is a proposition before it has been proved or disproved.",
+      "options": {
+        "A": "Lemma",
+        "B": "Theorem",
+        "C": "Corollary",
+        "D": "Conjecture",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T20:02:01.420Z"
+    },
+    {
+      "id": 1753560197284,
+      "question": "Which of the following is a whole number?",
+      "options": {
+        "A": "$$\\frac{2\\sqrt{3}}{4}$$",
+        "B": "$$\\frac{4\\sqrt{4}}{3}$$",
+        "C": "$$\\frac{7\\sqrt{5}}{6}$$",
+        "D": "$$\\frac{3\\sqrt{6}}{2}$$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T20:03:17.284Z"
+    },
+    {
+      "id": 1753560270484,
+      "question": "Which of the following is a rational number?",
+      "options": {
+        "A": "$$\\frac{2\\sqrt{3}}{4}$$",
+        "B": "$$\\frac{4\\sqrt{4}}{3}$$",
+        "C": "$$\\frac{7\\sqrt{5}}{6}$$",
+        "D": "$$\\frac{3\\sqrt{6}}{2}$$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T20:04:30.484Z"
+    },
+    {
+      "id": 1753560743106,
+      "question": "These are numbers that can be written as non-terminating, non-repeating decimals.",
+      "options": {
+        "A": "Irrational numbers",
+        "B": "Rational numbers",
+        "C": "Whole numbers",
+        "D": "Natural numbers",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T20:12:23.106Z"
+    },
+    {
+      "id": 1753560790059,
+      "question": "This is used in the Peano axioms which define all natural numbers beyond zero. This is defined as $s(n)=n+1$ for each natural number $n$.",
+      "options": {
+        "A": "Successor function",
+        "B": "Well ordering property",
+        "C": "Principle of mathematical induction",
+        "D": "Pigeonhole principle",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T20:13:10.059Z"
+    },
+    {
+      "id": 1753560869242,
+      "question": "This shows that for property $p(n)$ true or false, if $p(1)$ is true, and $p(n)→p(n+1)$ then $p(n)$ is true for all natural numbers.",
+      "options": {
+        "A": "Successor function",
+        "B": "Well ordering property",
+        "C": "Principle of mathematical induction",
+        "D": "Pigeonhole principle",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T20:14:29.242Z"
+    },
+    {
+      "id": 1753561581656,
+      "question": "This states that every nonempty subset of natural numbers has a largest element.",
+      "options": {
+        "A": "Successor function",
+        "B": "Well ordering property",
+        "C": "Principle of mathematical induction",
+        "D": "Pigeonhole principle",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T20:26:21.656Z"
+    },
+    {
+      "id": 1753561605495,
+      "question": "This is an obvious but powerful tool in solving many combinatorial problems.",
+      "options": {
+        "A": "Successor function",
+        "B": "Well ordering property",
+        "C": "Principle of mathematical induction",
+        "D": "Pigeonhole principle",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T20:26:45.495Z"
+    },
+    {
+      "id": 1753563147373,
+      "question": "Observe the following use of PMI for the next 4 questions:\n\nProve that $$1+4+9+\\dots+n^2=\\frac{n(n+1)(2n+1)}{6}$$ for $\\forall n \\in Z^+$\n\nStep 1: Show statement is true for $n=1$:\n(a) $n=1$\n\nStep 2: Assume the statement is true for $n=k$:\n(a) $1+4+9+\\dots+k^2=\\frac{k(k+1)(2k+1)}{6}$\n(b) $a_k=k^2,  S_k=\\frac{k(k+1)(2k+1)}{6}$\n(c) $a_{k+1}=(k+1)^2$\n(d) $S_{k+1}=\\frac{(k+1)[(k+1)+1](2k+1+1)}{6}$\n(e) $S_{k+1}=\\frac{(k+1)(k+2)(2k+3)}{6}\\rightarrow goal$\n\nStep 3: Show that the statement is true for $n=k+1$:\n(a) $S_k + a_{k+1} = \\frac{k(k+1)(2k+1)}{6}+ a_{k+1}$\n(b) $S_{k+1} = \\frac{k(k+1)(2k+1)}{6}+ (k+1)^2$\n(c) $S_{k+1} =\\frac{(k+1)(k+2)(2k+3)}{6}\\rightarrow goal\\ was\\ achieved$\n\nStep 4: By PMI,\n(a) $\\therefore1+4+9+\\dots+n^2=\\frac{n(n+1)(2n+1)}{6}$ for $\\forall n \\in Z^+$\n\nTrue/False:\nStep 1(a) was performed correctly.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T20:52:27.373Z"
+    },
+    {
+      "id": 1753563154971,
+      "question": "True/False:\nStep 2(a) was performed incorrectly.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T20:52:34.971Z"
+    },
+    {
+      "id": 1753563252554,
+      "question": "True/False:\nStep 2(d) was performed correctly.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T20:54:12.555Z"
+    },
+    {
+      "id": 1753563308499,
+      "question": "True/False:\nStep 3(b) was performed correctly.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T20:55:08.499Z"
+    },
+    {
+      "id": 1753563513107,
+      "question": "Snow White is arranging herself and the seven dwarfs--Doc, Sleepy, Happy, Grumpy, Bashful, Sneezy, and Dopey--around a circular table inside their mini-home. How many ways can Snow White arrange it?",
+      "options": {
+        "A": "53,130 ways",
+        "B": "120 ways",
+        "C": "5,040 ways",
+        "D": "311,875,200 ways",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T20:58:33.107Z"
+    },
+    {
+      "id": 1753563516442,
+      "question": "Snow White is arranging herself and the seven dwarfs--Doc, Sleepy, Happy, Grumpy, Bashful, Sneezy, and Dopey--around a circular table inside their mini-home. How many ways can Snow White arrange it if Doc and Sleepy must sit next to each other?",
+      "options": {
+        "A": "53,130 ways",
+        "B": "120 ways",
+        "C": "5,040 ways",
+        "D": "311,875,200 ways",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T20:58:36.442Z"
+    },
+    {
+      "id": 1753563843642,
+      "question": "A standard deck of cards consists of 52 cards divided into four suits: hearts, diamonds, clubs, and spades. Each suit contains 13 cards, which are ranked as follows: Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, and King. Hearts and diamonds are traditionally colored red, while clubs and spades are colored black. Each suit has 1 Ace, 9 numbered cards (2 through 10), and 3 face cards: Jack, Queen, and King.\n\nIn how many ways can you form 5-card hands if there are only aces or face cards?",
+      "options": {
+        "A": "2,598,960 ways",
+        "B": "311,875,200 ways",
+        "C": "28 ways",
+        "D": "4,368 ways",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T21:04:03.642Z"
+    },
+    {
+      "id": 1753565508508,
+      "question": "In many games, the Ace can be either the highest or lowest card in the deck, depending on the rules of the game being played. When the Ace is high, it ranks above the King.\n\nIn how many ways can you form 3-card hands that only contain red cards ranking lower than 7, Ace High?",
+      "options": {
+        "A": "720 ways",
+        "B": "1,320 ways",
+        "C": "120 ways",
+        "D": "220 ways",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T21:31:48.508Z"
+    },
+    {
+      "id": 1753565723092,
+      "question": "In many games, the Ace can be either the highest or lowest card in the deck, depending on the rules of the game being played. When the Ace is low, it ranks below the 2 card.\n\nIn how many ways can you form 4-card hands that only contain spade cards ranking below than 7, Ace Low?",
+      "options": {
+        "A": "15 ways",
+        "B": "360 ways",
+        "C": "120 ways",
+        "D": "5 ways",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:35:23.092Z"
+    },
+    {
+      "id": 1753563867561,
+      "question": "There are 50 woodland creatures gathered in the forest. What is the minimum number of them that must share the same birth month?",
+      "options": {
+        "A": "4 creatures",
+        "B": "5 creatures",
+        "C": "12 creatures",
+        "D": "50 creatures",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:04:27.561Z"
+    },
+    {
+      "id": 1753565376870,
+      "question": "The dwarfs' kitchen offers 15 types of pies and 6 types of tea. How many choices does a dwarf have if they order either a pie or a tea?",
+      "options": {
+        "A": "9 choices",
+        "B": "80 choices",
+        "C": "21 choices",
+        "D": "90 choices",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T21:29:36.870Z"
+    },
+    {
+      "id": 1753565311437,
+      "question": "The Evil Queen must select 4 of her 12 loyal hunters to search for Snow White. How many ways can she form her team?",
+      "options": {
+        "A": "498 ways",
+        "B": "11,800 ways",
+        "C": "40,320 ways",
+        "D": "24 ways",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:28:31.437Z"
+    },
+    {
+      "id": 1753566401858,
+      "question": "The kingdom is hosting a tournament where 8 sword fighters and 8 archers can participate. If one fighter and one archer must be chosen, how many ways can the tournament organizers select the teams?",
+      "options": {
+        "A": "16 ways",
+        "B": "20,160 ways",
+        "C": "40,320 ways",
+        "D": "64 ways",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T21:46:41.858Z"
+    },
+    {
+      "id": 1753566494514,
+      "question": "If 26 noble families are invited to a ball, how many people must be present to ensure that at least two guests have first and last names that start with the same letter? (26 letters in the English alphabet)",
+      "options": {
+        "A": "676 ways",
+        "B": "677 ways",
+        "C": "678 ways",
+        "D": "679 ways",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T21:48:14.514Z"
+    },
+    {
+      "id": 1753565909668,
+      "question": "Snow White is choosing an outfit for the royal ball. She has 2 gowns, 3 pairs of shoes, and 2 tiaras. How many outfit combinations can she create?",
+      "options": {
+        "A": "36 outfits",
+        "B": "7 outfits",
+        "C": "10 outfits",
+        "D": "24 outfits",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T21:38:29.668Z"
+    },
+    {
+      "id": 1753566568481,
+      "question": "Snow White must attend 6 royal events from Monday to Friday. At least how many days will she need to attend at least two events?",
+      "options": {
+        "A": "1 day",
+        "B": "2 days",
+        "C": "5 days",
+        "D": "6 days",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:49:28.481Z"
+    },
+    {
+      "id": 1753566321602,
+      "question": "In a jousting competition featuring 10 knights, the top three spots (gold, silver, and bronze) must be awarded. In how many ways can the winners be determined?",
+      "options": {
+        "A": "6 ways",
+        "B": "336 ways",
+        "C": "720 ways",
+        "D": "5,040 ways",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T21:45:21.602Z"
+    },
+    {
+      "id": 1753564006794,
+      "question": "In the kingdom, there are 39 villagers. If they are graded based on their kindness (4.0, 3.0, 2.0, 1.0, or 0.5), what is the minimum number of villagers who must receive the same grade?",
+      "options": {
+        "A": "7 villagers",
+        "B": "8 villagers",
+        "C": "9 villagers",
+        "D": "6 villagers",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:06:46.794Z"
+    },
+    {
+      "id": 1753566641993,
+      "question": "How many different anagrams of \"APPLE\" exist if all the vowels have to be placed together?",
+      "options": {
+        "A": "12 anagrams",
+        "B": "24 anagrams",
+        "C": "4 anagrams",
+        "D": "48 anagrams",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T21:50:41.993Z"
+    },
+    {
+      "id": 1753564247738,
+      "question": "How many different anagrams of \"ENTREPRENEUR\" exist if all the letter E's have to be placed together?",
+      "options": {
+        "A": "725,760 anagrams",
+        "B": "30,240 anagrams",
+        "C": "1,663,200 anagrams",
+        "D": "362,880 anagrams",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:10:47.738Z"
+    },
+    {
+      "id": 1753564693336,
+      "question": "Find the coefficient of $dq^4$ in the expansion of $(2d-3q^2)^3$",
+      "options": {
+        "A": "$-27$",
+        "B": "$-36$",
+        "C": "$8$",
+        "D": "$54$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T21:18:13.336Z"
+    },
+    {
+      "id": 1753564700222,
+      "question": "Find the coefficient of $d^5q^5$ in the expansion of $(d+3q)^6$",
+      "options": {
+        "A": "$18$",
+        "B": "$135$",
+        "C": "$1458$",
+        "D": "$729$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T21:18:20.222Z"
+    },
+    {
+      "id": 1753564795910,
+      "question": "Find the third term in the expansion of $(d+3q)^6$",
+      "options": {
+        "A": "$540d^3q^3$",
+        "B": "$18d^5q$",
+        "C": "$135d^4q^2$",
+        "D": "$729q^6$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T21:19:55.910Z"
+    },
+    {
+      "id": 1753564987871,
+      "question": "What are the sum of the coefficients of the expansion of $(2d^3-1)^4$?",
+      "options": {
+        "A": "$80$",
+        "B": "$1$",
+        "C": "$56$",
+        "D": "$132$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T21:23:07.871Z"
+    },
+    {
+      "id": 1753564994278,
+      "question": "Expand $(3d^2-1)^5$",
+      "options": {
+        "A": "$243d^{10}-405d^8+270d^6-90d^4+15d^2-1$",
+        "B": "$243d^{10}-270d^8+405d^6-90d^4+15d^2-1$",
+        "C": "$243d^{10}-270d^8+405d^6-15d^4+90d^2-1$",
+        "D": "$243d^{10}-90d^8+405d^6-15d^4+270d^2-1$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T21:23:14.278Z"
+    },
+    {
+      "id": 1753566935698,
+      "question": "Any integer can be used as a base.",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T21:55:35.698Z"
+    },
+    {
+      "id": 1753567327881,
+      "question": "Computers represent integers as _____ numbers.",
+      "options": {
+        "A": "octal",
+        "B": "binary",
+        "C": "decimal",
+        "D": "hexadecimal",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:02:07.881Z"
+    },
+    {
+      "id": 1753567372577,
+      "question": "The Most Significant Bit (MSB) or Most Significant Digit (MSD) is the right-most digit  in a binary number. More accurately the digit with the highest radix (base) value",
+      "options": {
+        "A": "True",
+        "B": "False",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:02:52.577Z"
+    },
+    {
+      "id": 1753567422504,
+      "question": "In computer memory, 32 bits is equivalent to how many words?",
+      "options": {
+        "A": "2 words",
+        "B": "1 word",
+        "C": "4 words",
+        "D": "0.5 words",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:03:42.504Z"
+    },
+    {
+      "id": 1753567441273,
+      "question": "On which binary integer representation does zero have only one corresponding representation?",
+      "options": {
+        "A": "Sign and Magnitude",
+        "B": "Unsigned",
+        "C": "One's complement",
+        "D": "Two's complement",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:04:01.273Z"
+    },
+    {
+      "id": 1753567689336,
+      "question": "Convert $(1999)_{10}$ to base 7 notation.",
+      "options": {
+        "A": "$(5545)_7$",
+        "B": "$(5554)_7$",
+        "C": "$(5455)_7$",
+        "D": "$(4555)_7$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:08:09.336Z"
+    },
+    {
+      "id": 1753567693790,
+      "question": "Convert $(1461)_{8}$ to base 2 notation.",
+      "options": {
+        "A": "$(1100110001)_2$",
+        "B": "$(1101010011)_2$",
+        "C": "$(1001111011)_2$",
+        "D": "$(1001110001)_2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:08:13.790Z"
+    },
+    {
+      "id": 1753567854934,
+      "question": "Convert $(8152)_{9}$ to base 10 notation.",
+      "options": {
+        "A": "$(5930)_{10}$",
+        "B": "$(3255)_{10}$",
+        "C": "$(7421)_{10}$",
+        "D": "$(5690)_{10}$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T22:10:54.934Z"
+    },
+    {
+      "id": 1753568013158,
+      "question": "Convert $(1000111101)_{2}$ to hexadecimal notation.",
+      "options": {
+        "A": "$(329)_{16}$",
+        "B": "$(C14)_{16}$",
+        "C": "$(23D)_{16}$",
+        "D": "$(216)_{16}$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T22:13:33.158Z"
+    },
+    {
+      "id": 1753568162942,
+      "question": "Convert $(1337)_{10}$ to base 3 notation.",
+      "options": {
+        "A": "$(1211112)_3$",
+        "B": "$(1212011)_3$",
+        "C": "$(1012221)_3$",
+        "D": "$(1202011)_3$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:16:02.942Z"
+    },
+    {
+      "id": 1753568654037,
+      "question": "What is the one's complement of $(0110111)_2$?",
+      "options": {
+        "A": "$(1001000)_2$",
+        "B": "$(11001000)_2$",
+        "C": "$(10011001)_2$",
+        "D": "$(1001001)_2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:24:14.037Z"
+    },
+    {
+      "id": 1753568657780,
+      "question": "What is the one's complement representation of $(-34)_{10}$ as a byte?",
+      "options": {
+        "A": "$(10100010)_2$",
+        "B": "$(11011101)_2$",
+        "C": "$(10011001)_2$",
+        "D": "$(10010011)_2$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:24:17.780Z"
+    },
+    {
+      "id": 1753568969907,
+      "question": "What is the two's complement of $(01010111)_2$?",
+      "options": {
+        "A": "$(01010110)_2$",
+        "B": "$(11001000)_2$",
+        "C": "$(11010110)_2$",
+        "D": "$(10101001)_2$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:29:29.907Z"
+    },
+    {
+      "id": 1753569179674,
+      "question": "What is the two's complement representation of $(-34)_{10}$ as a byte?",
+      "options": {
+        "A": "$(11011110)_2$",
+        "B": "$(10011001)_2$",
+        "C": "$(10011001)_2$",
+        "D": "$(11010011)_2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:32:59.674Z"
+    },
+    {
+      "id": 1753569250322,
+      "question": "Decode the following two's complement representation as an integer: $(11100101)_{2}$",
+      "options": {
+        "A": "$27$",
+        "B": "$-27$",
+        "C": "$24$",
+        "D": "$-24$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:34:10.322Z"
+    },
+    {
+      "id": 1753569300000,
+      "question": "Perform the binary addition: $(1011)_2 + (1101)_2$",
+      "options": {
+        "A": "$(11000)_2$",
+        "B": "$(10111)_2$",
+        "C": "$(11010)_2$",
+        "D": "$(10110)_2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:35:00.000Z"
+    },
+    {
+      "id": 1753569310000,
+      "question": "Perform the binary subtraction: $(10110)_2 - (1001)_2$",
+      "options": {
+        "A": "$(1101)_2$",
+        "B": "$(1111)_2$",
+        "C": "$(1011)_2$",
+        "D": "$(1001)_2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:35:10.000Z"
+    },
+    {
+      "id": 1753569330000,
+      "question": "What is the result of $(1010)_2 + (0111)_2 + (1100)_2$?",
+      "options": {
+        "A": "$(100011)_2$",
+        "B": "$(11001)_2$",
+        "C": "$(100101)_2$",
+        "D": "$(11011)_2$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:35:30.000Z"
+    },
+    {
+      "id": 1753569350000,
+      "question": "Which of the following statements about divisibility is true?",
+      "options": {
+        "A": "If $a | b$ and $b | c$, then $a | c$",
+        "B": "If $a | b$, then $b | a$",
+        "C": "If $a | (b + c)$, then $a | b$ and $a | c$",
+        "D": "If $a | bc$, then $a | b$ or $a | c$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:35:50.000Z"
+    },
+    {
+      "id": 1753569360000,
+      "question": "If $12 | n$ and $18 | n$, what is the smallest positive value of $n$?",
+      "options": {
+        "A": "$216$",
+        "B": "$36$",
+        "C": "$72$",
+        "D": "$144$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:36:00.000Z"
+    },
+    {
+      "id": 1753569370000,
+      "question": "Which number is NOT divisible by 9?",
+      "options": {
+        "A": "$2547$",
+        "B": "$1368$",
+        "C": "$4563$",
+        "D": "$7245$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:36:10.000Z"
+    },
+    {
+      "id": 1753569380000,
+      "question": "If $d | a$ and $d | b$, then $d$ divides which of the following?",
+      "options": {
+        "A": "$ab$",
+        "B": "$a + b$",
+        "C": "$a - b$",
+        "D": "All of the above",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:36:20.000Z"
+    },
+    {
+      "id": 1753569390000,
+      "question": "The prime factorization of 360 is:",
+      "options": {
+        "A": "$2^3 \\cdot 3^2 \\cdot 5$",
+        "B": "$2^2 \\cdot 3^3 \\cdot 5$",
+        "C": "$2^4 \\cdot 3^2 \\cdot 5$",
+        "D": "$2^3 \\cdot 3^2 \\cdot 5^2$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:36:30.000Z"
+    },
+    {
+      "id": 1753569400000,
+      "question": "Find $\\gcd(84, 126)$.",
+      "options": {
+        "A": "$43$",
+        "B": "$21$",
+        "C": "$14$",
+        "D": "$7$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T22:36:40.000Z"
+    },
+    {
+      "id": 1753569410000,
+      "question": "If $\\gcd(a, b) = 12$ and $\\text{lcm}(a, b) = 180$, and $a = 36$, find $b$.",
+      "options": {
+        "A": "$45$",
+        "B": "$60$",
+        "C": "$72$",
+        "D": "$90$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:36:50.000Z"
+    },
+    {
+      "id": 1753569420000,
+      "question": "Which pair of integers is relatively prime?",
+      "options": {
+        "A": "$(15, 35)$",
+        "B": "$(21, 49)$",
+        "C": "$(16, 25)$",
+        "D": "$(18, 24)$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T22:37:00.000Z"
+    },
+    {
+      "id": 1753569430000,
+      "question": "Given a linear Diophantine equation $11x + 13y = 15$.\n\nFind $x$.",
+      "options": {
+        "A": "-75",
+        "B": "90",
+        "C": "30",
+        "D": "-30",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:37:10.000Z"
+    },
+    {
+      "id": 1753569440000,
+      "question": "Given a linear Diophantine equation $13x - 12y = 30$.\n\nFind $y$.",
+      "options": {
+        "A": "-75",
+        "B": "90",
+        "C": "30",
+        "D": "-30",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T22:37:20.000Z"
+    },
+    {
+      "id": 1753569450000,
+      "question": "Which of the following is true about modular arithmetic?",
+      "options": {
+        "A": "If $a \\equiv b \\pmod{m}$, then $a^2 \\equiv b^2 \\pmod{m}$",
+        "B": "If $a \\equiv b \\pmod{m}$, then $\\gcd(a,m) = \\gcd(b,m)$",
+        "C": "If $ac \\equiv bc \\pmod{m}$, then $a \\equiv b \\pmod{m}$",
+        "D": "Both A and B are true",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:37:30.000Z"
+    },
+    {
+      "id": 1753569460000,
+      "question": "What is $247 \\bmod 13$?",
+      "options": {
+        "A": "$0$",
+        "B": "$1$",
+        "C": "$12$",
+        "D": "$4$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:37:40.000Z"
+    },
+    {
+      "id": 1753569470000,
+      "question": "If $ac ≡ bc\\pmod{m}$ and $gcd(c, m) = 5$, what can we conclude about $a$ and $ b$?",
+      "options": {
+        "A": "$a ≡b \\pmod{m}$",
+        "B": "$a ≡b \\pmod{m/5}$",
+        "C": "$a/5 ≡b/5 \\pmod{m/5}$",
+        "D": "$a ≡b \\pmod{5m}$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:37:50.000Z"
+    },
+    {
+      "id": 1753569480000,
+      "question": "Find the least residue of $(-73) \\bmod 15$.",
+      "options": {
+        "A": "$7$",
+        "B": "$8$",
+        "C": "$12$",
+        "D": "$2$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:38:00.000Z"
+    },
+    {
+      "id": 1753569490000,
+      "question": "Find the least residue of $5^{23} \\bmod 13$.",
+      "options": {
+        "A": "$8$",
+        "B": "$5$",
+        "C": "$12$",
+        "D": "$1$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:38:10.000Z"
+    },
+    {
+      "id": 1753569500000,
+      "question": "Reduce $3^{45} \\cdot 7^{23} \\bmod 11$.",
+      "options": {
+        "A": "$5$",
+        "B": "$9$",
+        "C": "$3$",
+        "D": "$7$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T22:38:20.000Z"
+    },
+    {
+      "id": 1753569510000,
+      "question": "If $12x \\equiv 18 \\pmod{30}$, what is the reduced congruence?",
+      "options": {
+        "A": "$2x \\equiv 3 \\pmod{5}$",
+        "B": "$4x \\equiv 6 \\pmod{10}$",
+        "C": "$6x \\equiv 9 \\pmod{15}$",
+        "D": "$12x \\equiv 18 \\pmod{30}$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:38:30.000Z"
+    },
+    {
+      "id": 1753569520000,
+      "question": "Find the least residue of $15^{87} \\bmod 24$.",
+      "options": {
+        "A": "$13$",
+        "B": "$15$",
+        "C": "$2$",
+        "D": "$1$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:38:40.000Z"
+    },
+    {
+      "id": 1753569530000,
+      "question": "Is $72985742054396846875$ divisible by $3125$?",
+      "options": {
+        "A": "Yes",
+        "B": "No",
+        "C": "Maybe",
+        "D": "Cannot be computed",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:38:50.000Z"
+    },
+    {
+      "id": 1753574774699,
+      "question": "To which numbers is $537973253524601196288$ divisible by?",
+      "options": {
+        "A": "$\\{2, 4, 8, 16, 32, 64, 128\\}$",
+        "B": "$\\{2, 4, 8, 16, 32, 64\\}$",
+        "C": "$\\{2, 4, 8, 16, 32, 64, 128, 256\\}$",
+        "D": "$\\{2, 4, 8, 16, 32, 64, 128, 256, 512\\}$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-27T00:06:14.699Z"
+    },
+    {
+      "id": 1753569550000,
+      "question": "How many solutions does the linear congruence $6x \\equiv 9 \\pmod{15}$ have?",
+      "options": {
+        "A": "$0$",
+        "B": "$1$",
+        "C": "$2$",
+        "D": "$6$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T22:39:10.000Z"
+    },
+    {
+      "id": 1753569560000,
+      "question": "Find the modular inverse of $7$ modulo $26$.",
+      "options": {
+        "A": "$15$",
+        "B": "$21$",
+        "C": "$11$",
+        "D": "$19$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:39:20.000Z"
+    },
+    {
+      "id": 1753569570000,
+      "question": "Find the modular inverse of $13$ modulo $29$.",
+      "options": {
+        "A": "$25$",
+        "B": "$21$",
+        "C": "$20$",
+        "D": "$9$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:39:30.000Z"
+    },
+    {
+      "id": 1753569580000,
+      "question": "Using the Chinese Remainder Theorem, find $x$ where $x \\equiv 2 \\pmod{3}$, $x \\equiv 3 \\pmod{5}$, and $x \\equiv 1 \\pmod{7}$.",
+      "options": {
+        "A": "$23$",
+        "B": "$43$",
+        "C": "$8$",
+        "D": "$71$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T22:39:40.000Z"
+    },
+    {
+      "id": 1753569590000,
+      "question": "Using the Chinese Remainder Theorem, find $x$ where $x \\equiv 1 \\pmod{4}$, $x \\equiv 2 \\pmod{9}$, and $x \\equiv 3 \\pmod{25}$.",
+      "options": {
+        "A": "$353$",
+        "B": "$173$",
+        "C": "$29$",
+        "D": "$53$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:39:50.000Z"
+    },
+    {
+      "id": 1753569600000,
+      "question": "Calculate $\\phi(84)$ where $\\phi$ is Euler's totient function.",
+      "options": {
+        "A": "$24$",
+        "B": "$36$",
+        "C": "$28$",
+        "D": "$40$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:40:00.000Z"
+    },
+    {
+      "id": 1753569610000,
+      "question": "Calculate $\\phi(125)$ where $\\phi$ is Euler's totient function.",
+      "options": {
+        "A": "$120$",
+        "B": "$100$",
+        "C": "$124$",
+        "D": "$75$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:40:10.000Z"
+    },
+    {
+      "id": 1753569620000,
+      "question": "(2 points, shade the same answer in the next question)\nFind the last 3 digits of $7^{999}$.",
+      "options": {
+        "A": "$343$",
+        "B": "$007$",
+        "C": "$443$",
+        "D": "$143$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:40:20.000Z"
+    },
+    {
+      "id": 1753575394962,
+      "question": "(2 points, shade the same answer from the previous question)\nFind the last 3 digits of $7^{999}$.",
+      "options": {
+        "A": "$343$",
+        "B": "$007$",
+        "C": "$443$",
+        "D": "$143$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-27T00:16:34.962Z"
+    },
+    {
+      "id": 1753569640000,
+      "question": "Find the order of $3$ modulo $17$.",
+      "options": {
+        "A": "$4$",
+        "B": "$8$",
+        "C": "$16$",
+        "D": "$2$",
+        "E": ""
+      },
+      "correctAnswer": "C",
+      "createdAt": "2025-07-26T22:40:40.000Z"
+    },
+    {
+      "id": 1753569650000,
+      "question": "Find the order of $5$ modulo $13$.",
+      "options": {
+        "A": "$4$",
+        "B": "$6$",
+        "C": "$12$",
+        "D": "$3$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:40:50.000Z"
+    },
+    {
+      "id": 1753569660000,
+      "question": "Is $2$ a primitive root of $13$?",
+      "options": {
+        "A": "Yes",
+        "B": "No",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:41:00.000Z"
+    },
+    {
+      "id": 1753569670000,
+      "question": "Is $3$ a primitive root of $17$?",
+      "options": {
+        "A": "Yes",
+        "B": "No",
+        "C": "",
+        "D": "",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:41:10.000Z"
+    },
+    {
+      "id": 1753569680000,
+      "question": "List all elements in the reduced residue system modulo $12$.",
+      "options": {
+        "A": "$\\{1, 5, 7, 11\\}$",
+        "B": "$\\{1, 3, 5, 7, 9, 11\\}$",
+        "C": "$\\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11\\}$",
+        "D": "$\\{1, 7, 11\\}$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:41:20.000Z"
+    },
+    {
+      "id": 1753569690000,
+      "question": "How many primitive roots does $113$ have?",
+      "options": {
+        "A": "$112$",
+        "B": "$48$",
+        "C": "$64$",
+        "D": "$10$",
+        "E": ""
+      },
+      "correctAnswer": "B",
+      "createdAt": "2025-07-26T22:41:30.000Z"
+    },
+    {
+      "id": 1753569700000,
+      "question": "Given that $g = 3$ is a primitive root of $17$, find $\\text{ind}_3(7)$.",
+      "options": {
+        "A": "$5$",
+        "B": "$14$",
+        "C": "$8$",
+        "D": "$11$",
+        "E": ""
+      },
+      "correctAnswer": "D",
+      "createdAt": "2025-07-26T22:41:40.000Z"
+    },
+    {
+      "id": 1753569710000,
+      "question": "Given that $g = 2$ is a primitive root of $13$, find $\\text{ind}_2(7)$.",
+      "options": {
+        "A": "$7$",
+        "B": "$9$",
+        "C": "$12$",
+        "D": "$5$",
+        "E": ""
+      },
+      "correctAnswer": "E",
+      "createdAt": "2025-07-26T22:41:50.000Z"
+    },
+    {
+      "id": 1753569720000,
+      "question": "Given that $g = 7$ is a primitive root of $22$, find $\\text{ind}_7(13)$.",
+      "options": {
+        "A": "$3$",
+        "B": "$2$",
+        "C": "$5$",
+        "D": "$6$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:42:00.000Z"
+    },
+    {
+      "id": 1753569730000,
+      "question": "(2 points, shade the same answer in the next question)\nSolve for $x$ in the congruence $3^x \\equiv 6 \\pmod{7}$.",
+      "options": {
+        "A": "$x=3$",
+        "B": "$x=4$",
+        "C": "$x=2$",
+        "D": "$x=5$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-26T22:42:10.000Z"
+    },
+    {
+      "id": 1753577025243,
+      "question": "(2 points, shade the same answer from the previous question)\nSolve for $x$ in the congruence $3^x \\equiv 6 \\pmod{7}$.",
+      "options": {
+        "A": "$x=3$",
+        "B": "$x=4$",
+        "C": "$x=2$",
+        "D": "$x=5$",
+        "E": ""
+      },
+      "correctAnswer": "A",
+      "createdAt": "2025-07-27T00:43:45.243Z"
+    }
+  ]
+}
