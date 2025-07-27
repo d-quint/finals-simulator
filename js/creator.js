@@ -532,6 +532,94 @@ function clearAllQuestions() {
     }
 }
 
+function shuffleAllChoices() {
+    if (questions.length === 0) {
+        showInfoMessage('No questions to shuffle. Please add some questions first.');
+        return;
+    }
+    
+    // Count how many questions will be affected
+    let affectedCount = 0;
+    questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            // Count questions in banks that don't have E as correct answer
+            affectedCount += item.questions.filter(q => q.correctAnswer !== 'E').length;
+        } else if (item.correctAnswer !== 'E') {
+            // Count regular questions that don't have E as correct answer
+            affectedCount++;
+        }
+    });
+    
+    if (affectedCount === 0) {
+        showInfoMessage('No questions need shuffling. All questions either have correct answer E or have insufficient choices.');
+        return;
+    }
+    
+    if (confirm(`This will shuffle the answer choices for ${affectedCount} questions. Questions with correct answer "E" will remain unchanged. Are you sure you want to continue?`)) {
+        shuffleQuestionsChoices();
+        updateQuestionsList();
+        showSuccessMessage(`Successfully shuffled answer choices for ${affectedCount} questions!`);
+    }
+}
+
+function shuffleQuestionsChoices() {
+    questions.forEach(item => {
+        if (item.type === 'questionBank') {
+            // Shuffle questions within the bank
+            item.questions = shuffleQuestionChoicesArray(item.questions);
+        } else {
+            // Shuffle regular question
+            const shuffled = shuffleQuestionChoicesArray([item]);
+            Object.assign(item, shuffled[0]);
+        }
+    });
+}
+
+function shuffleQuestionChoicesArray(questionsArray) {
+    return questionsArray.map(question => {
+        // Skip shuffling if the correct answer is E (these are intentionally structured)
+        if (question.correctAnswer === 'E') {
+            return question;
+        }
+        
+        // Get only the choices that actually have content
+        const availableChoices = ['A', 'B', 'C', 'D'].filter(choice => 
+            question.options[choice] && question.options[choice].trim() !== ''
+        );
+        
+        // If there are fewer than 2 choices, no need to shuffle
+        if (availableChoices.length < 2) {
+            return question;
+        }
+        
+        // Create array of choice content in original order
+        const choiceContents = availableChoices.map(choice => question.options[choice]);
+        
+        // Shuffle the content array
+        const shuffledContents = [...choiceContents].sort(() => Math.random() - 0.5);
+        
+        // Create new options object
+        const newOptions = { ...question.options };
+        
+        // Map shuffled content back to the available choices
+        availableChoices.forEach((choice, index) => {
+            newOptions[choice] = shuffledContents[index];
+        });
+        
+        // Find the new correct answer by finding where the original correct content ended up
+        const originalCorrectContent = question.options[question.correctAnswer];
+        const newCorrectChoice = availableChoices.find(choice => 
+            newOptions[choice] === originalCorrectContent
+        );
+        
+        return {
+            ...question,
+            options: newOptions,
+            correctAnswer: newCorrectChoice || question.correctAnswer
+        };
+    });
+}
+
 function exportQuestionSet() {
     if (questions.length === 0) {
         showErrorMessage('No questions to export. Please add some questions first.');

@@ -87,6 +87,7 @@ function validateQuestionSet(data) {
 function showFileInfo(data) {
     const fileInfo = document.getElementById('fileInfo');
     const fileDetails = document.getElementById('fileDetails');
+    const testOptions = document.getElementById('testOptions');
     
     // Calculate total questions including question banks
     let totalQuestions = 0;
@@ -105,10 +106,12 @@ function showFileInfo(data) {
     `;
     
     fileInfo.classList.remove('d-none');
+    testOptions.classList.remove('d-none');
 }
 
 function hideFileInfo() {
     document.getElementById('fileInfo').classList.add('d-none');
+    document.getElementById('testOptions').classList.add('d-none');
     document.getElementById('startTestBtn').disabled = true;
 }
 
@@ -239,6 +242,52 @@ function processQuestionBanks(items) {
     return processedQuestions;
 }
 
+// Function to shuffle answer choices while preserving questions with correct answer E
+function shuffleAnswerChoices(questions) {
+    return questions.map(question => {
+        // Skip shuffling if the correct answer is E (these are intentionally structured)
+        if (question.correctAnswer === 'E') {
+            return question;
+        }
+        
+        // Get only the choices that actually have content
+        const availableChoices = ['A', 'B', 'C', 'D'].filter(choice => 
+            question.options[choice] && question.options[choice].trim() !== ''
+        );
+        
+        // If there are fewer than 2 choices, no need to shuffle
+        if (availableChoices.length < 2) {
+            return question;
+        }
+        
+        // Create array of choice content in original order
+        const choiceContents = availableChoices.map(choice => question.options[choice]);
+        
+        // Shuffle the content array
+        const shuffledContents = [...choiceContents].sort(() => Math.random() - 0.5);
+        
+        // Create new options object
+        const newOptions = { ...question.options };
+        
+        // Map shuffled content back to the available choices
+        availableChoices.forEach((choice, index) => {
+            newOptions[choice] = shuffledContents[index];
+        });
+        
+        // Find the new correct answer by finding where the original correct content ended up
+        const originalCorrectContent = question.options[question.correctAnswer];
+        const newCorrectChoice = availableChoices.find(choice => 
+            newOptions[choice] === originalCorrectContent
+        );
+        
+        return {
+            ...question,
+            options: newOptions,
+            correctAnswer: newCorrectChoice || question.correctAnswer
+        };
+    });
+}
+
 function startTest() {
     if (!originalQuestionSet) return;
     
@@ -248,6 +297,12 @@ function startTest() {
     // Create a fresh copy of the question set with processed questions
     questionSet = JSON.parse(JSON.stringify(originalQuestionSet));
     questionSet.questions = processedQuestions;
+    
+    // Apply choice shuffling if enabled
+    const shuffleChoices = document.getElementById('shuffleChoices').checked;
+    if (shuffleChoices) {
+        questionSet.questions = shuffleAnswerChoices(questionSet.questions);
+    }
     
     // Initialize test data
     currentQuestionIndex = 0;
