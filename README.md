@@ -1,6 +1,7 @@
 # Finals Simulator 📚
 
 A modern, sleek exam/quiz system with LaTeX support for creating and taking tests. Built with Bootstrap 5 and featuring real-time LaTeX rendering.
+View the live demo here: [https://d-quint.github.io/finals-simulator/](https://d-quint.github.io/finals-simulator/)
 
 ## 🌟 Features
 
